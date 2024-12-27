@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ClassCheck.Resources.Styles.Dictionary1">
+    <!-- Page Title Style -->
+    <Style x:Key="PageTitleStyle" TargetType="Label">
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="VerticalOptions" Value="Center" />
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="FontSize" Value="20" />
+    </Style>
+
+    <!-- Entry Style -->
+    <Style x:Key="EntryStyle" TargetType="Entry">
+        <Setter Property="Margin" Value="0,5" />
+        <Setter Property="FontSize" Value="16" />
+    </Style>
+
+    <!-- Button Style -->
+    <Style x:Key="ButtonStyle" TargetType="Button">
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="BackgroundColor" Value="#007AFF" />
+        <Setter Property="TextColor" Value="White" />
+        <Setter Property="CornerRadius" Value="8" />
+        <Setter Property="Margin" Value="0,10" />
+    </Style>
+
+    <!-- Register Label Style -->
+    <Style x:Key="RegisterLabelStyle" TargetType="Label">
+        <Setter Property="TextColor" Value="LightBlue" />
+        <Setter Property="FontAttributes" Value="Italic" />
+        <Setter Property="HorizontalTextAlignment" Value="Center" />
+    </Style>
+
+    <!-- Label Hover Trigger -->
+    <!--<Style TargetType="Label">
+        <Style.Triggers>
+            <Trigger TargetType="Label" Property="IsMouseOver" Value="True">
+                <Setter Property="TextDecorations" Value="Underline" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>-->
+
+</ResourceDictionary>

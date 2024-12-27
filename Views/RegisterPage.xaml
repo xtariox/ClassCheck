@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ClassCheck.Views.RegisterPage"
+             xmlns:vm="clr-namespace:ClassCheck.ViewModels"
+             Title="Register Page">
+
+    <StackLayout Padding="20">
+        <!-- Username Entry -->
+        <Entry x:Name="UsernameEntry" Placeholder="Username" Text="{Binding Username}" />
+
+        <!-- Email Entry -->
+        <Entry x:Name="EmailEntry" Placeholder="Email" Text="{Binding Email}" Keyboard="Email" />
+
+        <!-- Password Entry -->
+        <Entry x:Name="PasswordEntry" Placeholder="Password" Text="{Binding Password}" IsPassword="True" />
+
+        <!-- Register Button -->
+        <Button Text="Register" Command="{Binding RegisterCommand}" />
+
+        <!-- Cancel Button (optional, goes back to login page) -->
+        <Button Text="Cancel" Command="{Binding CancelCommand}" />
+
+        <!-- Error Label -->
+        <Label x:Name="ErrorLabel"
+               TextColor="Red" IsVisible="{Binding IsErrorVisible}"
+               Text="{Binding ErrorMessage}"
+               FontAttributes="Bold" 
+               Margin="0,10,0,0" />
+    </StackLayout>
+
+</ContentPage>
