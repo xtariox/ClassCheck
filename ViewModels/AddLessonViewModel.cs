@@ -2,14 +2,28 @@
 using MauiApp1.Models;
 using ClassCheck.Services;
 using System.Threading.Tasks;
+using System.Collections.ObjectModel;
 
 namespace MauiApp1.ViewModels
 {
     public class AddLessonViewModel : BaseStudentViewModel
     {
         private readonly DatabaseService _databaseService;
+        private readonly MajorViewModel _majorViewModel;
+        public ObservableCollection<Major> Majors => _majorViewModel.Majors;
 
-        // Propriétés pour le binding
+        private ObservableCollection<Lesson> _lessons = new ObservableCollection<Lesson>();
+        public ObservableCollection<Lesson> Lessons
+        {
+            get => _lessons;
+            private set
+            {
+                _lessons = value;
+                OnPropertyChanged();
+            }
+        }
+
+        // Properties for binding
         private string _courseName;
         public string CourseName
         {
@@ -24,15 +38,15 @@ namespace MauiApp1.ViewModels
             set => SetProperty(ref _professor, value);
         }
 
-        private string _schedule;
-        public string Schedule
+        private DateTime _schedule;
+        public DateTime Schedule
         {
             get => _schedule;
             set => SetProperty(ref _schedule, value);
         }
 
-        private string _major;
-        public string Major
+        private Major _major;
+        public Major Major
         {
             get => _major;
             set => SetProperty(ref _major, value);
@@ -45,15 +59,19 @@ namespace MauiApp1.ViewModels
             set => SetProperty(ref _successMessage, value);
         }
 
-        // Commandes pour Ajouter et Annuler
+        // Commands for Add and Cancel actions
         public ICommand AddLessonCommand { get; }
         public ICommand CancelCommand { get; }
 
-        public AddLessonViewModel(DatabaseService databaseService)
+        public AddLessonViewModel(DatabaseService databaseService, MajorViewModel majorViewModel)
         {
             _databaseService = databaseService;
+            _majorViewModel = majorViewModel;
 
-            // Initialisation des commandes
+            // Ensure majors are loaded asynchronously
+            LoadMajorsAsync().ConfigureAwait(false);
+
+            // Initialize the commands
             AddLessonCommand = new Command(async () =>
             {
                 System.Diagnostics.Debug.WriteLine("Add button clicked");
@@ -67,24 +85,43 @@ namespace MauiApp1.ViewModels
             });
         }
 
-        // Méthode pour ajouter une leçon
+        // Method to load majors asynchronously (ensuring it works)
+        public async Task LoadMajorsAsync()
+        {
+            try
+            {
+                await _majorViewModel.LoadMajorsAsync(); // Ensure majors are loaded
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error loading majors: {ex.Message}");
+            }
+        }
+
+        // Method to add a lesson
         private async Task AddLessonAsync()
         {
             if (ValidateInput())
             {
-                // Création de la leçon
+                if (Schedule < DateTime.Now.Date) // Ensure the date is not in the past
+                {
+                    SuccessMessage = "The schedule date cannot be in the past.";
+                    return;
+                }
+
+                // Create a new lesson
                 var newLesson = new Lesson
                 {
                     CourseName = CourseName,
                     Professor = Professor,
                     Schedule = Schedule,
-                    Major = Major
+                    Major = Major.Name
                 };
 
-                // Ajout dans la base de données
+                // Add to the database
                 var result = await _databaseService.Insert(newLesson);
 
-                // Mise à jour du message de succès ou d'erreur
+                // Update the success or error message
                 if (result > 0)
                 {
                     SuccessMessage = "Lesson added successfully!";
@@ -101,22 +138,49 @@ namespace MauiApp1.ViewModels
             }
         }
 
-        // Validation des champs
+        // Input validation
         private bool ValidateInput()
         {
             return !string.IsNullOrWhiteSpace(CourseName) &&
                    !string.IsNullOrWhiteSpace(Professor) &&
-                   !string.IsNullOrWhiteSpace(Schedule) &&
-                   !string.IsNullOrWhiteSpace(Major);
+                   Major != null;
         }
 
-        // Réinitialiser les champs
+        // Reset the fields
         private void ClearFields()
         {
             CourseName = string.Empty;
             Professor = string.Empty;
-            Schedule = string.Empty;
-            Major = string.Empty;
+            Schedule = DateTime.Now;
+            Major = null;
+        }
+
+        // Method to load lessons asynchronously
+        public async Task LoadLessonsAsync()
+        {
+            try
+            {
+                // Retrieve the list of lessons from the database
+                var lessons = await _databaseService.GetLessons();  // Assuming the method GetLessons exists in the DatabaseService
+
+                // Clear the existing lessons collection
+                Lessons.Clear();
+
+                // Add each retrieved lesson to the Lessons collection
+                foreach (var lesson in lessons)
+                {
+                    Lessons.Add(lesson);
+                    System.Diagnostics.Debug.WriteLine($"Added lesson: {lesson.CourseName}");
+                }
+
+                // Debug the number of lessons loaded
+                System.Diagnostics.Debug.WriteLine($"Total lessons loaded: {Lessons.Count}");
+            }
+            catch (Exception ex)
+            {
+                // Handle any errors that may occur
+                System.Diagnostics.Debug.WriteLine($"Error loading lessons: {ex.Message}");
+            }
         }
     }
 }

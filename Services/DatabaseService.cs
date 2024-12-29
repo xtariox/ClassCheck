@@ -14,7 +14,7 @@ namespace ClassCheck.Services
         {
             _securityService = securityService;
             _connection = new SQLiteAsyncConnection(Path.Combine(FileSystem.AppDataDirectory, DB_NAME));
-            InitializeDatabaseAsync().ConfigureAwait(false);
+            InitializeDatabaseAsync().Wait(); // Ensure initialization is completed
         }
 
         // Initialize the database asynchronously without blocking
@@ -24,9 +24,13 @@ namespace ClassCheck.Services
             await _connection.CreateTableAsync<User>();
             await _connection.CreateTableAsync<Student>();
             await _connection.CreateTableAsync<Lesson>();
+            await _connection.CreateTableAsync<Major>();
+            await _connection.CreateTableAsync<Attendance>();
 
             // Create indices
             await CreateIndicesAsync();
+            await InitializeMajorsAsync();
+
         }
         // ------------------ User -----------------------
         // Ensure email uniqueness by creating an index
@@ -81,7 +85,7 @@ namespace ClassCheck.Services
             return await _connection.Table<Student>().Where(s => s.IDCardNumber == idCardNumber).FirstOrDefaultAsync();
         }
 
-        
+
 
         public async Task<int> Insert(Student student)
         {
@@ -112,7 +116,7 @@ namespace ClassCheck.Services
         {
             return await _connection.Table<Lesson>().Where(l => l.Id == id).FirstOrDefaultAsync();
         }
-        
+
         public async Task<int> Insert(Lesson lesson)
         {
             return await _connection.InsertAsync(lesson);
@@ -127,5 +131,56 @@ namespace ClassCheck.Services
         {
             return await _connection.DeleteAsync(lesson);
         }
+
+        // -------------------- Major ---------------------------
+        // Method to add a major
+        // Method to initialize the database with predefined majors
+        public async Task InitializeMajorsAsync()
+        {
+            var count = await _connection.Table<Major>().CountAsync();
+            if (count == 0)
+            {
+                var majors = new List<Major>{
+                    new Major {Name = "Computer Science" },
+                    new Major {Name = "Engineering" },
+                    new Major {Name = "Business" }
+                };
+                foreach (var major in majors)
+                {
+                    await _connection.InsertAsync(major);
+                }
+            }
+        }
+
+        // Method to get all majors
+        public async Task<List<Major>> GetMajorsAsync()
+        {
+            return await _connection.Table<Major>().ToListAsync();
+        }
+
+
+        // -------------------- Attendance ---------------------------
+        // Method to add an attendance
+        public async Task<int> AddAttendanceAsync(Attendance attendance)
+        {
+            return await _connection.InsertAsync(attendance);
+        }
+
+        // Method to get all attendance
+        public async Task<List<Attendance>> GetAttendanceByFiltersAsync(string lessonId, string major, DateTime date)
+        {
+            var query = _connection.Table<Attendance>().Where(a => a.LessonId == lessonId && a.Major == major && a.AttendanceDate.Date == date.Date);
+            return await query.ToListAsync();
+        }
+
+        // Method to get attendance by student
+        public async Task<int> UpdateAttendanceAsync(Attendance attendance)
+        {
+            return await _connection.UpdateAsync(attendance);
+        }
+
+
+
+
     }
 }

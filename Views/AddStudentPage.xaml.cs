@@ -1,20 +1,19 @@
+using ClassCheck.Services;
 using ClassCheck.ViewModels;
-
 using MauiApp1.ViewModels;
-
+using MauiApp1.Views;
+using MauiApp1.Views;
 
 namespace ClassCheck.Views;
 
 public partial class AddStudentPage : ContentPage
 {
-    public AddStudentPage(AddStudentViewModel viewModelSt)
+    public AddStudentPage()
     {
         InitializeComponent();
-        BindingContext=viewModelSt;
-        
+        BindingContext = new AddStudentViewModel(
+            App.DependencyService.GetRequiredService<DatabaseService>(),
+            App.DependencyService.GetRequiredService<MajorViewModel>()
+        );
     }
-
-
-
-
 }

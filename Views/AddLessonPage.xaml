@@ -2,13 +2,18 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MauiApp1.Views.AddLessonPage"
-             Title="Add Lesson">
+             Title="Add Lesson"
+             xmlns:sys="clr-namespace:System;assembly=System.Runtime">
     <StackLayout Padding="20">
         <!-- Champs de saisie -->
         <Entry Placeholder="Course Name" Text="{Binding CourseName}" />
         <Entry Placeholder="Professor" Text="{Binding Professor}" />
-        <Entry Placeholder="Schedule" Text="{Binding Schedule}" />
-        <Entry Placeholder="Major" Text="{Binding Major}" />
+        <DatePicker Date="{Binding Schedule}" MinimumDate="{x:Static sys:DateTime.Now}"/>
+        <!-- ComboBox for Majors -->
+        <Picker Title="Select Major"
+                ItemsSource="{Binding Majors}"
+                ItemDisplayBinding="{Binding Name}"
+                SelectedItem="{Binding Major}" />
 
         <!-- Message de succès -->
         <Label Text="{Binding SuccessMessage}" TextColor="Green" HorizontalOptions="Center" />

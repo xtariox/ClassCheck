@@ -22,7 +22,7 @@ namespace MauiApp1.ViewModels
             NavigateToAbsenceCommand = new Command(async () =>
             {
                 
-                await Shell.Current.GoToAsync("///absence");
+                await Shell.Current.GoToAsync("///attendance");
             });
 
             NavigateToAddStudentCommand = new Command(async () =>
@@ -40,9 +40,9 @@ namespace MauiApp1.ViewModels
                 await Shell.Current.GoToAsync("///login");
             });
 
-            LogoutCommand = new Command(() =>
+            LogoutCommand = new Command(async () =>
             {
-                Console.WriteLine("Logout triggered");
+
             });
         }
 

@@ -89,7 +89,7 @@ namespace ClassCheck.ViewModels
 
                 await _databaseService.Insert(newUser);
                 _userService.CurrentUser = newUser;
-                await Shell.Current.GoToAsync("///main");
+                await Shell.Current.GoToAsync("///home");
             }, "Registration failed");
         }
 

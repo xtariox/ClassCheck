@@ -1,15 +1,17 @@
 ﻿using System.Windows.Input;
 using MauiApp1.Models;
+using System.Collections.ObjectModel;
 using ClassCheck.Services;
-using System.Threading.Tasks;
-
-using Microsoft.Extensions.Logging;
+using System.Diagnostics;
 
 namespace MauiApp1.ViewModels
 {
     public class AddStudentViewModel : BaseStudentViewModel
     {
         private readonly DatabaseService _databaseService;
+        private readonly MajorViewModel _majorViewModel;
+
+        public ObservableCollection<Major> Majors => _majorViewModel.Majors;
 
         // Properties to bind to UI
         private string _idcardnumber;
@@ -47,14 +49,13 @@ namespace MauiApp1.ViewModels
             set => SetProperty(ref _phonenumber, value);
         }
 
-        private string _major;
-        public string Major
+        private Major _major;
+        public Major Major
         {
             get => _major;
             set => SetProperty(ref _major, value);
         }
 
-        // Message to display when a student is added
         private string _successMessage;
         public string SuccessMessage
         {
@@ -62,77 +63,97 @@ namespace MauiApp1.ViewModels
             set => SetProperty(ref _successMessage, value);
         }
 
-        // Commands for Add and Cancel actions
         public ICommand AddStudentCommand { get; }
         public ICommand CancelCommand { get; }
 
-
-
-
-       
-        public AddStudentViewModel(DatabaseService databaseService)
+        public AddStudentViewModel(DatabaseService databaseService, MajorViewModel majorViewModel)
         {
             _databaseService = databaseService;
+            _majorViewModel = majorViewModel;
+
+            // Load majors
+            LoadMajorsAsync().ConfigureAwait(false);
 
             // Initialize commands
             AddStudentCommand = new Command(async () =>
             {
-                System.Diagnostics.Debug.WriteLine("Add button clicked");  // Ajout de log
+                System.Diagnostics.Debug.WriteLine("Add button clicked");
                 await AddStudentAsync();
             });
 
             CancelCommand = new Command(() =>
             {
-                System.Diagnostics.Debug.WriteLine("Cancel button clicked");  // Ajout de log
+                System.Diagnostics.Debug.WriteLine("Cancel button clicked");
                 Shell.Current.GoToAsync("///home");
             });
         }
 
-        // Method to add a student
-        private async Task AddStudentAsync()
+        // Method to load majors asynchronously (ensuring it works)
+        public async Task LoadMajorsAsync()
         {
-            if (ValidateInput())
+            try
             {
-                // Vérification si un étudiant avec le même numéro de carte ID existe déjà
-                var existingStudent = await _databaseService.GetByIDCardNumber(IDCardNumber);
-                if (existingStudent != null)
-                {
-                    SuccessMessage = "A student with this ID card number already exists.";
-                    return;
-                }
-
-                // Création de l'étudiant
-                var newStudent = new Student
-                {
-                    IDCardNumber = IDCardNumber,
-                    FirstName = FirstName,
-                    LastName = LastName,
-                    Email = Email,
-                    PhoneNumber = PhoneNumber,
-                    Major = Major
-                };
-
-                // Insertion dans la base de données
-                var result = await _databaseService.Insert(newStudent);
-
-                // Mise à jour du message de succès ou d'échec
-                if (result > 0)
-                {
-                    SuccessMessage = "Student added successfully!";
-                    ClearFields();  // Clear fields after successful addition
-                }
-                else
-                {
-                    SuccessMessage = "Failed to add the student.";
-                }
+                await _majorViewModel.LoadMajorsAsync(); // Ensure majors are loaded
             }
-            else
+            catch (Exception ex)
             {
-                SuccessMessage = "Please fill in all the required fields.";
+                System.Diagnostics.Debug.WriteLine($"Error loading majors: {ex.Message}");
             }
         }
 
-        // Simple validation method
+        private async Task AddStudentAsync()
+        {
+            try
+            {
+                if (ValidateInput())
+                {
+                    var existingStudent = await _databaseService.GetByIDCardNumber(IDCardNumber);
+                    if (existingStudent != null)
+                    {
+                        SuccessMessage = "A student with this ID card number already exists.";
+                        return;
+                    }
+
+                    if (Major == null)
+                    {
+                        SuccessMessage = "Please select a valid major.";
+                        return;
+                    }
+
+                    var newStudent = new Student
+                    {
+                        IDCardNumber = IDCardNumber,
+                        FirstName = FirstName,
+                        LastName = LastName,
+                        Email = Email,
+                        PhoneNumber = PhoneNumber,
+                        Major = Major.Name // Store the Major ID
+                    };
+
+                    var result = await _databaseService.Insert(newStudent);
+
+                    if (result > 0)
+                    {
+                        SuccessMessage = "Student added successfully!";
+                        ClearFields();
+                    }
+                    else
+                    {
+                        SuccessMessage = "Failed to add the student.";
+                    }
+                }
+                else
+                {
+                    SuccessMessage = "Please fill in all the required fields.";
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Exception in AddStudentAsync: {ex.Message}");
+                SuccessMessage = "An error occurred while adding the student.";
+            }
+        }
+
         private bool ValidateInput()
         {
             return !string.IsNullOrWhiteSpace(IDCardNumber) &&
@@ -140,10 +161,9 @@ namespace MauiApp1.ViewModels
                    !string.IsNullOrWhiteSpace(LastName) &&
                    !string.IsNullOrWhiteSpace(Email) &&
                    !string.IsNullOrWhiteSpace(PhoneNumber) &&
-                   !string.IsNullOrWhiteSpace(Major);
+                   !string.IsNullOrWhiteSpace(Major?.Name);
         }
 
-        // Clear the input fields
         private void ClearFields()
         {
             IDCardNumber = string.Empty;
@@ -151,7 +171,7 @@ namespace MauiApp1.ViewModels
             LastName = string.Empty;
             Email = string.Empty;
             PhoneNumber = string.Empty;
-            Major = string.Empty;
+            Major.Name = string.Empty; // Clear Major selection
         }
     }
 }

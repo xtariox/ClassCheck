@@ -1,0 +1,37 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MauiApp1.Views.AttendancePage"
+             Title="Attendance">
+    <StackLayout Padding="10">
+        <Label Text="Mark Attendance" FontSize="Large" HorizontalOptions="Center" />
+
+        <!-- Picker for Lesson -->
+        <Picker ItemsSource="{Binding Lessons}"
+                ItemDisplayBinding="{Binding CourseName}" 
+                SelectedItem="{Binding SelectedLesson}" 
+                Title="Select Lesson" />
+
+        <!-- Picker for Major -->
+        <Picker ItemsSource="{Binding Majors}"
+                ItemDisplayBinding="{Binding Name}" 
+                SelectedItem="{Binding SelectedMajor}" 
+                Title="Select Major" />
+
+        <DatePicker Date="{Binding AttendanceDate}" />
+        <Button Text="Load Attendance" Command="{Binding LoadAttendanceCommand}" />
+        <Button Text="Cancel" Command="{Binding CancelCommand}" BackgroundColor="Red" TextColor="White" />
+
+
+        <CollectionView ItemsSource="{Binding Attendances}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <StackLayout Orientation="Vertical" Padding="5">
+                        <Label Text="{Binding StudentId}" FontAttributes="Bold" />
+                        <Label Text="{Binding IsPresent, StringFormat='Present: {0}'}" />
+                        <Label Text="{Binding AttendanceDate, StringFormat='Date: {0:MM/dd/yyyy}'}" />
+                    </StackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </StackLayout>
+</ContentPage>

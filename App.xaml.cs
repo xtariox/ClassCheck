@@ -5,6 +5,7 @@ using MauiApp1.ViewModels;
 using MauiApp1.Views;
 using Microsoft.Extensions.Logging;
 
+
 namespace ClassCheck
 {
     public partial class App : Application
@@ -38,8 +39,11 @@ namespace ClassCheck
             services.AddTransient<RegisterViewModel>();
             services.AddTransient<MainPageViewModel>();
             services.AddTransient<AddStudentViewModel>();
+            services.AddTransient<MajorViewModel>();
             services.AddTransient<HomePageViewModel>();
             services.AddTransient<AddLessonViewModel>();
+            services.AddTransient<AttendanceViewModel>();
+
 
             // Register Pages
             services.AddTransient<LoginPage>();
@@ -48,7 +52,7 @@ namespace ClassCheck
             services.AddTransient<AddStudentPage>();
             services.AddTransient<HomePage>();
             services.AddTransient<AddLessonPage>();
-            services.AddTransient<AbsencePage>();
+            services.AddTransient<AttendancePage>();
 
             // Register AppShell
             services.AddSingleton<AppShell>(); // Main application shell which is responsible for navigation and routing
@@ -56,6 +60,10 @@ namespace ClassCheck
             // Build service provider
             var serviceProvider = services.BuildServiceProvider();
             DependencyService = serviceProvider; // Set the DependencyService instance for later use
+
+            // Register services
+            DependencyService.Register<DatabaseService>();
+            DependencyService.Register<MajorViewModel>();
 
             // Set the MainPage to AppShell
             MainPage = serviceProvider.GetRequiredService<AppShell>();
