@@ -1,12 +1,12 @@
 ﻿using System.Windows.Input;
 using ClassCheck.Models;
 using ClassCheck.Services;
-using System.Threading.Tasks;
 using System.Collections.ObjectModel;
+using Microsoft.Extensions.Logging;
 
 namespace ClassCheck.ViewModels
 {
-    public class AddLessonViewModel : BaseStudentViewModel
+    public class AddLessonViewModel : BaseViewModel
     {
         public event EventHandler LessonAdded;
         private readonly DatabaseService _databaseService;
@@ -64,7 +64,10 @@ namespace ClassCheck.ViewModels
         public ICommand AddLessonCommand { get; }
         public ICommand CancelCommand { get; }
 
-        public AddLessonViewModel(DatabaseService databaseService, MajorViewModel majorViewModel)
+        public AddLessonViewModel(
+            DatabaseService databaseService,
+            MajorViewModel majorViewModel,
+            ILogger<AddLessonViewModel> logger) : base(logger)
         {
             _databaseService = databaseService;
             _majorViewModel = majorViewModel;

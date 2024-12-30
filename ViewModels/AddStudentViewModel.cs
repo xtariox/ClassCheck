@@ -4,7 +4,6 @@ using ClassCheck.Constants;
 using System.Collections.ObjectModel;
 using Microsoft.Extensions.Logging;
 using System.Windows.Input;
-using System.Diagnostics;
 
 namespace ClassCheck.ViewModels
 {
@@ -95,15 +94,23 @@ namespace ClassCheck.ViewModels
         {
             await ExecuteAsync(async () =>
             {
+                // Clear previous messages
+                SuccessMessage = string.Empty;
+                ErrorMessage = string.Empty;
+
                 if (!ValidateInput())
                 {
-                    throw new InvalidOperationException(ValidationMessages.RequiredFields);
+                    ErrorMessage = ValidationMessages.RequiredFields;
+                    IsErrorVisible = true;
+                    return;
                 }
 
                 var existingStudent = await _databaseService.GetByIDCardNumberAsync(IDCardNumber);
                 if (existingStudent != null)
                 {
-                    throw new InvalidOperationException(ValidationMessages.StudentIDExists);
+                    ErrorMessage = ValidationMessages.StudentIDExists;
+                    IsErrorVisible = true;
+                    return;
                 }
 
                 var newStudent = new Student
@@ -119,7 +126,9 @@ namespace ClassCheck.ViewModels
                 var result = await _databaseService.InsertAsync(newStudent);
                 if (result <= 0)
                 {
-                    throw new InvalidOperationException("Failed to add the student to database");
+                    ErrorMessage = "Failed to add the student to database";
+                    IsErrorVisible = true;
+                    return;
                 }
 
                 SuccessMessage = "Student added successfully!";

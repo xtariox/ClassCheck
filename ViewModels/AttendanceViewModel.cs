@@ -4,7 +4,7 @@ using ClassCheck.ViewModels;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
-public class AttendanceViewModel : BaseStudentViewModel
+public class AttendanceViewModel : BaseViewModel
 {
     private readonly DatabaseService _databaseService;
     private readonly MajorViewModel _majorViewModel;

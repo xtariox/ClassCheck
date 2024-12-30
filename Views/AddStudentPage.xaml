@@ -17,8 +17,17 @@
         ItemDisplayBinding="{Binding Name}"
         SelectedItem="{Binding Major}" />
 
-        <!-- Message de succès -->
-        <Label Text="{Binding SuccessMessage}" TextColor="Green" HorizontalOptions="Center" />
+        <!-- Error Message -->
+        <Label Text="{Binding ErrorMessage}" 
+               TextColor="Red" 
+               IsVisible="{Binding IsErrorVisible}"
+               HorizontalOptions="Center" />
+
+        <!-- Success Message -->
+        <Label Text="{Binding SuccessMessage}" 
+               TextColor="Green" 
+               IsVisible="{Binding IsSuccessVisible}"
+               HorizontalOptions="Center" />
 
         <!-- Boutons Ajouter et Annuler -->
         <Button Text="Add" Command="{Binding AddStudentCommand}" />
