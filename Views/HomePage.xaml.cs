@@ -1,7 +1,7 @@
-using MauiApp1.ViewModels;
+using ClassCheck.ViewModels;
 using System.Windows.Input;
 
-namespace MauiApp1.Views;
+namespace ClassCheck.Views;
 
 public partial class HomePage : ContentPage
 {

@@ -10,10 +10,24 @@
         <Entry Placeholder="Last Name" Text="{Binding LastName}" />
         <Entry Placeholder="Email" Text="{Binding Email}" />
         <Entry Placeholder="Phone Number" Text="{Binding PhoneNumber}" />
-        <Entry Placeholder="Major" Text="{Binding Major}" />
 
-        <!-- Message de succès -->
-        <Label Text="{Binding SuccessMessage}" TextColor="Green" HorizontalOptions="Center" />
+        <!-- ComboBox for Majors -->
+        <Picker Title="Select Major"
+        ItemsSource="{Binding Majors}"
+        ItemDisplayBinding="{Binding Name}"
+        SelectedItem="{Binding Major}" />
+
+        <!-- Error Message -->
+        <Label Text="{Binding ErrorMessage}" 
+               TextColor="Red" 
+               IsVisible="{Binding IsErrorVisible}"
+               HorizontalOptions="Center" />
+
+        <!-- Success Message -->
+        <Label Text="{Binding SuccessMessage}" 
+               TextColor="Green" 
+               IsVisible="{Binding IsSuccessVisible}"
+               HorizontalOptions="Center" />
 
         <!-- Boutons Ajouter et Annuler -->
         <Button Text="Add" Command="{Binding AddStudentCommand}" />

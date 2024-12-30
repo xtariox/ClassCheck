@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace MauiApp1.ViewModels
+namespace ClassCheck.ViewModels
 {
 
     public class HomePageViewModel
@@ -22,7 +22,7 @@ namespace MauiApp1.ViewModels
             NavigateToAbsenceCommand = new Command(async () =>
             {
                 
-                await Shell.Current.GoToAsync("///absence");
+                await Shell.Current.GoToAsync("///attendance");
             });
 
             NavigateToAddStudentCommand = new Command(async () =>
@@ -40,12 +40,11 @@ namespace MauiApp1.ViewModels
                 await Shell.Current.GoToAsync("///login");
             });
 
-            LogoutCommand = new Command(() =>
+            LogoutCommand = new Command(async () =>
             {
-                Console.WriteLine("Logout triggered");
+                await Shell.Current.GoToAsync("///login");
             });
         }
 
     }
 }
-    

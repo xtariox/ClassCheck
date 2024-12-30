@@ -1,18 +1,18 @@
+using ClassCheck;
 using ClassCheck.Services;
 using ClassCheck.ViewModels;
-using Microsoft.Extensions.Logging;
 
 namespace ClassCheck.Views;
 
-public partial class AddStudentPage : ContentPage
+public partial class AttendancePage : ContentPage
 {
-    public AddStudentPage()
+    public AttendancePage()
     {
         InitializeComponent();
-        BindingContext = new AddStudentViewModel(
+        BindingContext = new AttendanceViewModel(
             App.DependencyService.GetRequiredService<DatabaseService>(),
             App.DependencyService.GetRequiredService<MajorViewModel>(),
-            App.DependencyService.GetRequiredService<ILogger<AddStudentViewModel>>()
+            App.DependencyService.GetRequiredService<AddLessonViewModel>()
         );
     }
 }

@@ -1,17 +1,19 @@
-﻿using System.Windows.Input;
-using MauiApp1.Models;
+﻿using ClassCheck.Models;
 using ClassCheck.Services;
-using System.Threading.Tasks;
-
+using ClassCheck.Constants;
+using System.Collections.ObjectModel;
 using Microsoft.Extensions.Logging;
+using System.Windows.Input;
 
-namespace MauiApp1.ViewModels
+namespace ClassCheck.ViewModels
 {
-    public class AddStudentViewModel : BaseStudentViewModel
+    public class AddStudentViewModel : BaseViewModel
     {
         private readonly DatabaseService _databaseService;
+        private readonly MajorViewModel _majorViewModel;
 
-        // Properties to bind to UI
+        public ObservableCollection<Major> Majors => _majorViewModel.Majors;
+
         private string _idcardnumber;
         public string IDCardNumber
         {
@@ -47,14 +49,13 @@ namespace MauiApp1.ViewModels
             set => SetProperty(ref _phonenumber, value);
         }
 
-        private string _major;
-        public string Major
+        private Major _major;
+        public Major Major
         {
             get => _major;
             set => SetProperty(ref _major, value);
         }
 
-        // Message to display when a student is added
         private string _successMessage;
         public string SuccessMessage
         {
@@ -62,46 +63,56 @@ namespace MauiApp1.ViewModels
             set => SetProperty(ref _successMessage, value);
         }
 
-        // Commands for Add and Cancel actions
         public ICommand AddStudentCommand { get; }
         public ICommand CancelCommand { get; }
 
-
-
-
-       
-        public AddStudentViewModel(DatabaseService databaseService)
+        public AddStudentViewModel(
+            DatabaseService databaseService, 
+            MajorViewModel majorViewModel,
+            ILogger<AddStudentViewModel> logger) : base(logger)
         {
             _databaseService = databaseService;
+            _majorViewModel = majorViewModel;
+
 
             // Initialize commands
-            AddStudentCommand = new Command(async () =>
-            {
-                System.Diagnostics.Debug.WriteLine("Add button clicked");  // Ajout de log
-                await AddStudentAsync();
-            });
+            AddStudentCommand = new Command(async () => await AddStudentAsync());
+            CancelCommand = new Command(() => Shell.Current.GoToAsync("///home"));
 
-            CancelCommand = new Command(() =>
-            {
-                System.Diagnostics.Debug.WriteLine("Cancel button clicked");  // Ajout de log
-                Shell.Current.GoToAsync("///home");
-            });
+            InitializeAsync();
         }
 
-        // Method to add a student
+        private async Task InitializeAsync()
+        {
+            await ExecuteAsync(async () =>
+            {
+                await _majorViewModel.LoadMajorsAsync();
+            }, "Failed to load majors");
+        }
+
         private async Task AddStudentAsync()
         {
-            if (ValidateInput())
+            await ExecuteAsync(async () =>
             {
-                // Vérification si un étudiant avec le même numéro de carte ID existe déjà
-                var existingStudent = await _databaseService.GetByIDCardNumber(IDCardNumber);
-                if (existingStudent != null)
+                // Clear previous messages
+                SuccessMessage = string.Empty;
+                ErrorMessage = string.Empty;
+
+                if (!ValidateInput())
                 {
-                    SuccessMessage = "A student with this ID card number already exists.";
+                    ErrorMessage = ValidationMessages.RequiredFields;
+                    IsErrorVisible = true;
                     return;
                 }
 
-                // Création de l'étudiant
+                var existingStudent = await _databaseService.GetByIDCardNumberAsync(IDCardNumber);
+                if (existingStudent != null)
+                {
+                    ErrorMessage = ValidationMessages.StudentIDExists;
+                    IsErrorVisible = true;
+                    return;
+                }
+
                 var newStudent = new Student
                 {
                     IDCardNumber = IDCardNumber,
@@ -109,41 +120,33 @@ namespace MauiApp1.ViewModels
                     LastName = LastName,
                     Email = Email,
                     PhoneNumber = PhoneNumber,
-                    Major = Major
+                    Major = Major.Name
                 };
 
-                // Insertion dans la base de données
-                var result = await _databaseService.Insert(newStudent);
+                var result = await _databaseService.InsertAsync(newStudent);
+                if (result <= 0)
+                {
+                    ErrorMessage = "Failed to add the student to database";
+                    IsErrorVisible = true;
+                    _logger?.LogError("InsertAsync returned non-positive result for new student.");
+                    return;
+                }
 
-                // Mise à jour du message de succès ou d'échec
-                if (result > 0)
-                {
-                    SuccessMessage = "Student added successfully!";
-                    ClearFields();  // Clear fields after successful addition
-                }
-                else
-                {
-                    SuccessMessage = "Failed to add the student.";
-                }
-            }
-            else
-            {
-                SuccessMessage = "Please fill in all the required fields.";
-            }
+                SuccessMessage = "Student added successfully!";
+                IsSuccessVisible = true;
+                ClearFields();
+
+            }, "Failed to add student");
         }
 
-        // Simple validation method
-        private bool ValidateInput()
-        {
-            return !string.IsNullOrWhiteSpace(IDCardNumber) &&
-                   !string.IsNullOrWhiteSpace(FirstName) &&
-                   !string.IsNullOrWhiteSpace(LastName) &&
-                   !string.IsNullOrWhiteSpace(Email) &&
-                   !string.IsNullOrWhiteSpace(PhoneNumber) &&
-                   !string.IsNullOrWhiteSpace(Major);
-        }
+        private bool ValidateInput() =>
+            !string.IsNullOrWhiteSpace(IDCardNumber) &&
+            !string.IsNullOrWhiteSpace(FirstName) &&
+            !string.IsNullOrWhiteSpace(LastName) &&
+            !string.IsNullOrWhiteSpace(Email) &&
+            !string.IsNullOrWhiteSpace(PhoneNumber) &&
+            Major != null;
 
-        // Clear the input fields
         private void ClearFields()
         {
             IDCardNumber = string.Empty;
@@ -151,7 +154,7 @@ namespace MauiApp1.ViewModels
             LastName = string.Empty;
             Email = string.Empty;
             PhoneNumber = string.Empty;
-            Major = string.Empty;
+            Major = null;
         }
     }
 }

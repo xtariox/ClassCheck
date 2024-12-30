@@ -64,6 +64,12 @@
 		<PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
 		<PackageReference Include="Sustainsys.Saml2" Version="2.10.0" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="Views\AttendancePage.xaml.cs">
+	    <DependentUpon>AttendancePage.xaml</DependentUpon>
+	  </Compile>
+	</ItemGroup>
 	
 	<ItemGroup>
 	  <MauiXaml Update="Resources\Styles\Dictionary1.xaml">

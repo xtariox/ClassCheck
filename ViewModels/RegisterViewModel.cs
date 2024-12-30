@@ -71,7 +71,7 @@ namespace ClassCheck.ViewModels
                 if (!ValidateInput())
                     return;
 
-                var existingUser = await _databaseService.GetByEmail(Email);
+                var existingUser = await _databaseService.GetByEmailAsync(Email);
                 if (existingUser != null)
                 {
                     ErrorMessage = ValidationMessages.EmailExists;
@@ -87,9 +87,9 @@ namespace ClassCheck.ViewModels
                     Password = hashedPassword
                 };
 
-                await _databaseService.Insert(newUser);
+                await _databaseService.InsertAsync(newUser);
                 _userService.CurrentUser = newUser;
-                await Shell.Current.GoToAsync("///main");
+                await Shell.Current.GoToAsync("///home");
             }, "Registration failed");
         }
 

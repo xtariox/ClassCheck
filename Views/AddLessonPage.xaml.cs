@@ -1,14 +1,18 @@
-using MauiApp1.ViewModels;
+using ClassCheck.Services;
+using ClassCheck.ViewModels;
+using Microsoft.Extensions.Logging;
 
-namespace MauiApp1.Views;
+namespace ClassCheck.Views;
 
 public partial class AddLessonPage : ContentPage
 {
-	public AddLessonPage(AddLessonViewModel viewModel)
-	{
+    public AddLessonPage()
+    {
         InitializeComponent();
-        BindingContext = viewModel;
+        BindingContext = new AddLessonViewModel(
+            App.DependencyService.GetRequiredService<DatabaseService>(),
+            App.DependencyService.GetRequiredService<MajorViewModel>(),
+            App.DependencyService.GetRequiredService<ILogger<AddLessonViewModel>>()
+        );
     }
-
-   
 }

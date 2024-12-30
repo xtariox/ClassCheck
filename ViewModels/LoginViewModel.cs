@@ -78,7 +78,7 @@ namespace ClassCheck.ViewModels
                     return;
                 }
 
-                var user = await _databaseService.GetByEmail(Email);
+                var user = await _databaseService.GetByEmailAsync(Email);
 
                 if (user != null && _securityService.VerifyPassword(Password, user.Password))
                 {
