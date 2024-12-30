@@ -38,7 +38,7 @@ namespace ClassCheck
             services.AddTransient<AddStudentViewModel>();
             services.AddTransient<MajorViewModel>();
             services.AddTransient<HomePageViewModel>();
-            services.AddTransient<AddLessonViewModel>();
+            services.AddSingleton<AddLessonViewModel>();
             services.AddTransient<AttendanceViewModel>();
 
             // Register Pages

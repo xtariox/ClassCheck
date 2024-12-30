@@ -3,13 +3,12 @@ using ClassCheck.Models;
 using ClassCheck.Services;
 using System.Collections.ObjectModel;
 using Microsoft.Extensions.Logging;
-using Microsoft.Maui.Dispatching; // Add this using directive at the top
 
 namespace ClassCheck.ViewModels
 {
     public class AddLessonViewModel : BaseViewModel
     {
-        public event EventHandler LessonAdded;
+        public event EventHandler LessonAdded = delegate { };
         private readonly DatabaseService _databaseService;
         private readonly MajorViewModel _majorViewModel;
         public ObservableCollection<Major> Majors => _majorViewModel.Majors;
@@ -90,12 +89,12 @@ namespace ClassCheck.ViewModels
             });
         }
 
-        // Method to load majors asynchronously (ensuring it works)
+        // Method to load majors asynchronously
         public async Task LoadMajorsAsync()
         {
             try
             {
-                await _majorViewModel.LoadMajorsAsync(); // Ensure majors are loaded
+                await _majorViewModel.LoadMajorsAsync();
             }
             catch (Exception ex)
             {
@@ -108,7 +107,7 @@ namespace ClassCheck.ViewModels
         {
             if (ValidateInput())
             {
-                if (Schedule < DateTime.Now.Date) // Ensure the date is not in the past
+                if (Schedule < DateTime.Now.Date)
                 {
                     SuccessMessage = "The schedule date cannot be in the past.";
                     return;
@@ -131,8 +130,9 @@ namespace ClassCheck.ViewModels
                 {
                     SuccessMessage = "Lesson added successfully!";
                     ClearFields();
-                    LessonAdded?.Invoke(this, EventArgs.Empty);
-                    MainThread.BeginInvokeOnMainThread(() => Lessons.Add(newLesson)); // Update on main thread
+                    Lessons.Add(newLesson); // Update on main thread
+                    OnPropertyChanged(nameof(Lessons)); // Notify that Lessons have been updated
+                    LessonAdded?.Invoke(this, EventArgs.Empty); // Invoke the event
                 }
                 else
                 {

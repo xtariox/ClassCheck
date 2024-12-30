@@ -78,16 +78,18 @@ public class AttendanceViewModel : BaseViewModel
         // Ensure Majors and Lessons are loaded before setting the command
         LoadMajorsAndLessons();
 
-        _lessonViewModel.LessonAdded += async (sender, lesson) =>
+        // Subscribe to the LessonAdded event
+        _lessonViewModel.LessonAdded += async (sender, args) =>
         {
             await LoadMajorsAndLessons();
         };
     }
 
-    private async Task LoadMajorsAndLessons()
+    public async Task LoadMajorsAndLessons()
     {
         await _majorViewModel.LoadMajorsAsync();
         await _lessonViewModel.LoadLessonsAsync();
+        OnPropertyChanged(nameof(Lessons)); // Notify that Lessons have been updated
     }
 
     private async Task LoadAttendanceAsync()
