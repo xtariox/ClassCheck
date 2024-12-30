@@ -1,10 +1,10 @@
 ﻿using System.Windows.Input;
-using MauiApp1.Models;
+using ClassCheck.Models;
 using System.Collections.ObjectModel;
 using ClassCheck.Services;
 using System.Diagnostics;
 
-namespace MauiApp1.ViewModels
+namespace ClassCheck.ViewModels
 {
     public class AddStudentViewModel : BaseStudentViewModel
     {
@@ -77,13 +77,13 @@ namespace MauiApp1.ViewModels
             // Initialize commands
             AddStudentCommand = new Command(async () =>
             {
-                System.Diagnostics.Debug.WriteLine("Add button clicked");
+                Debug.WriteLine("Add button clicked");
                 await AddStudentAsync();
             });
 
             CancelCommand = new Command(() =>
             {
-                System.Diagnostics.Debug.WriteLine("Cancel button clicked");
+                Debug.WriteLine("Cancel button clicked");
                 Shell.Current.GoToAsync("///home");
             });
         }
@@ -97,7 +97,7 @@ namespace MauiApp1.ViewModels
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Error loading majors: {ex.Message}");
+                Debug.WriteLine($"Error loading majors: {ex.Message}");
             }
         }
 
@@ -136,6 +136,8 @@ namespace MauiApp1.ViewModels
                     {
                         SuccessMessage = "Student added successfully!";
                         ClearFields();
+                        var students = await _databaseService.GetStudents();
+                        Debug.WriteLine($"Total students: {students.Count}");
                     }
                     else
                     {
@@ -149,7 +151,7 @@ namespace MauiApp1.ViewModels
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Exception in AddStudentAsync: {ex.Message}");
+                Debug.WriteLine($"Exception in AddStudentAsync: {ex.Message}");
                 SuccessMessage = "An error occurred while adding the student.";
             }
         }

@@ -1,8 +1,8 @@
 using ClassCheck;
 using ClassCheck.Services;
-using MauiApp1.ViewModels;
+using ClassCheck.ViewModels;
 
-namespace MauiApp1.Views;
+namespace ClassCheck.Views;
 
 public partial class AttendancePage : ContentPage
 {

@@ -1,6 +1,6 @@
 ﻿using ClassCheck.Services;
-using MauiApp1.Models;
-using MauiApp1.ViewModels;
+using ClassCheck.Models;
+using ClassCheck.ViewModels;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
@@ -12,7 +12,7 @@ public class AttendanceViewModel : BaseStudentViewModel
     public ObservableCollection<Major> Majors => _majorViewModel.Majors;
     public ObservableCollection<Lesson> Lessons => _lessonViewModel.Lessons;
 
-    public ObservableCollection<Attendance> Attendances { get; private set; } = new ObservableCollection<Attendance>();
+    public ObservableCollection<Attendance> Attendances { get; private set; } = [];
 
 
     public ICommand LoadAttendanceCommand { get; }
@@ -77,6 +77,11 @@ public class AttendanceViewModel : BaseStudentViewModel
 
         // Ensure Majors and Lessons are loaded before setting the command
         LoadMajorsAndLessons();
+
+        _lessonViewModel.LessonAdded += async (sender, lesson) =>
+        {
+            await LoadMajorsAndLessons();
+        };
     }
 
     private async Task LoadMajorsAndLessons()

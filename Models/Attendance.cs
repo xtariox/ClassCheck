@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MauiApp1.Models
+namespace ClassCheck.Models
 {
     public class Attendance
     {

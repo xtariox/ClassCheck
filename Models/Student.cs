@@ -1,6 +1,6 @@
 ﻿using SQLite;
 
-namespace MauiApp1.Models
+namespace ClassCheck.Models
 {
     public class Student
     {

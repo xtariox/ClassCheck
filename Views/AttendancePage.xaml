@@ -1,6 +1,6 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="MauiApp1.Views.AttendancePage"
+             x:Class="ClassCheck.Views.AttendancePage"
              Title="Attendance">
     <StackLayout Padding="10">
         <Label Text="Mark Attendance" FontSize="Large" HorizontalOptions="Center" />

@@ -1,8 +1,8 @@
 ﻿using ClassCheck.Services;
 using ClassCheck.ViewModels;
 using ClassCheck.Views;
-using MauiApp1.ViewModels;
-using MauiApp1.Views;
+using ClassCheck.ViewModels;
+using ClassCheck.Views;
 using Microsoft.Extensions.Logging;
 
 
@@ -62,8 +62,8 @@ namespace ClassCheck
             DependencyService = serviceProvider; // Set the DependencyService instance for later use
 
             // Register services
-            DependencyService.Register<DatabaseService>();
-            DependencyService.Register<MajorViewModel>();
+            //DependencyService.Register<DatabaseService>();
+            //DependencyService.Register<MajorViewModel>();
 
             // Set the MainPage to AppShell
             MainPage = serviceProvider.GetRequiredService<AppShell>();

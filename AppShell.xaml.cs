@@ -1,5 +1,5 @@
 ﻿using ClassCheck.Views;
-using MauiApp1.Views;
+using ClassCheck.Views;
 
 
 namespace ClassCheck

@@ -1,8 +1,8 @@
 using ClassCheck.Services;
 using ClassCheck.ViewModels;
-using MauiApp1.ViewModels;
-using MauiApp1.Views;
-using MauiApp1.Views;
+using ClassCheck.ViewModels;
+using ClassCheck.Views;
+using ClassCheck.Views;
 
 namespace ClassCheck.Views;
 

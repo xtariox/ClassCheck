@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace MauiApp1.Models
+namespace ClassCheck.Models
 {
     public class Lesson : INotifyPropertyChanged
     {

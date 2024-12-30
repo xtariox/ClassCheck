@@ -1,18 +1,19 @@
 ﻿using System.Windows.Input;
-using MauiApp1.Models;
+using ClassCheck.Models;
 using ClassCheck.Services;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 
-namespace MauiApp1.ViewModels
+namespace ClassCheck.ViewModels
 {
     public class AddLessonViewModel : BaseStudentViewModel
     {
+        public event EventHandler LessonAdded;
         private readonly DatabaseService _databaseService;
         private readonly MajorViewModel _majorViewModel;
         public ObservableCollection<Major> Majors => _majorViewModel.Majors;
 
-        private ObservableCollection<Lesson> _lessons = new ObservableCollection<Lesson>();
+        private ObservableCollection<Lesson> _lessons = [];
         public ObservableCollection<Lesson> Lessons
         {
             get => _lessons;
@@ -126,6 +127,7 @@ namespace MauiApp1.ViewModels
                 {
                     SuccessMessage = "Lesson added successfully!";
                     ClearFields();
+                    LessonAdded?.Invoke(this, EventArgs.Empty);
                 }
                 else
                 {
