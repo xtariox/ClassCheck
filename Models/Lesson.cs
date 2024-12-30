@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 
 namespace ClassCheck.Models
 {
-    public class Lesson : INotifyPropertyChanged
+    public class Lesson : INotifyPropertyChanged, IEntity
     {
         private int _id;
         private string _courseName;

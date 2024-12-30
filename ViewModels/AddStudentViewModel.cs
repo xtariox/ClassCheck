@@ -1,19 +1,20 @@
-﻿using System.Windows.Input;
-using ClassCheck.Models;
-using System.Collections.ObjectModel;
+﻿using ClassCheck.Models;
 using ClassCheck.Services;
+using ClassCheck.Constants;
+using System.Collections.ObjectModel;
+using Microsoft.Extensions.Logging;
+using System.Windows.Input;
 using System.Diagnostics;
 
 namespace ClassCheck.ViewModels
 {
-    public class AddStudentViewModel : BaseStudentViewModel
+    public class AddStudentViewModel : BaseViewModel
     {
         private readonly DatabaseService _databaseService;
         private readonly MajorViewModel _majorViewModel;
 
         public ObservableCollection<Major> Majors => _majorViewModel.Majors;
 
-        // Properties to bind to UI
         private string _idcardnumber;
         public string IDCardNumber
         {
@@ -66,105 +67,74 @@ namespace ClassCheck.ViewModels
         public ICommand AddStudentCommand { get; }
         public ICommand CancelCommand { get; }
 
-        public AddStudentViewModel(DatabaseService databaseService, MajorViewModel majorViewModel)
+        public AddStudentViewModel(
+            DatabaseService databaseService, 
+            MajorViewModel majorViewModel,
+            ILogger<AddStudentViewModel> logger) : base(logger)
         {
             _databaseService = databaseService;
             _majorViewModel = majorViewModel;
 
-            // Load majors
-            LoadMajorsAsync().ConfigureAwait(false);
 
             // Initialize commands
-            AddStudentCommand = new Command(async () =>
-            {
-                Debug.WriteLine("Add button clicked");
-                await AddStudentAsync();
-            });
+            AddStudentCommand = new Command(async () => await AddStudentAsync());
+            CancelCommand = new Command(() => Shell.Current.GoToAsync("///home"));
 
-            CancelCommand = new Command(() =>
-            {
-                Debug.WriteLine("Cancel button clicked");
-                Shell.Current.GoToAsync("///home");
-            });
+            InitializeAsync();
         }
 
-        // Method to load majors asynchronously (ensuring it works)
-        public async Task LoadMajorsAsync()
+        private async Task InitializeAsync()
         {
-            try
+            await ExecuteAsync(async () =>
             {
-                await _majorViewModel.LoadMajorsAsync(); // Ensure majors are loaded
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Error loading majors: {ex.Message}");
-            }
+                await _majorViewModel.LoadMajorsAsync();
+            }, "Failed to load majors");
         }
 
         private async Task AddStudentAsync()
         {
-            try
+            await ExecuteAsync(async () =>
             {
-                if (ValidateInput())
+                if (!ValidateInput())
                 {
-                    var existingStudent = await _databaseService.GetByIDCardNumber(IDCardNumber);
-                    if (existingStudent != null)
-                    {
-                        SuccessMessage = "A student with this ID card number already exists.";
-                        return;
-                    }
-
-                    if (Major == null)
-                    {
-                        SuccessMessage = "Please select a valid major.";
-                        return;
-                    }
-
-                    var newStudent = new Student
-                    {
-                        IDCardNumber = IDCardNumber,
-                        FirstName = FirstName,
-                        LastName = LastName,
-                        Email = Email,
-                        PhoneNumber = PhoneNumber,
-                        Major = Major.Name // Store the Major ID
-                    };
-
-                    var result = await _databaseService.Insert(newStudent);
-
-                    if (result > 0)
-                    {
-                        SuccessMessage = "Student added successfully!";
-                        ClearFields();
-                        var students = await _databaseService.GetStudents();
-                        Debug.WriteLine($"Total students: {students.Count}");
-                    }
-                    else
-                    {
-                        SuccessMessage = "Failed to add the student.";
-                    }
+                    throw new InvalidOperationException(ValidationMessages.RequiredFields);
                 }
-                else
+
+                var existingStudent = await _databaseService.GetByIDCardNumberAsync(IDCardNumber);
+                if (existingStudent != null)
                 {
-                    SuccessMessage = "Please fill in all the required fields.";
+                    throw new InvalidOperationException(ValidationMessages.StudentIDExists);
                 }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Exception in AddStudentAsync: {ex.Message}");
-                SuccessMessage = "An error occurred while adding the student.";
-            }
+
+                var newStudent = new Student
+                {
+                    IDCardNumber = IDCardNumber,
+                    FirstName = FirstName,
+                    LastName = LastName,
+                    Email = Email,
+                    PhoneNumber = PhoneNumber,
+                    Major = Major.Name
+                };
+
+                var result = await _databaseService.InsertAsync(newStudent);
+                if (result <= 0)
+                {
+                    throw new InvalidOperationException("Failed to add the student to database");
+                }
+
+                SuccessMessage = "Student added successfully!";
+                ClearFields();
+
+            }, "Failed to add student");
         }
 
-        private bool ValidateInput()
-        {
-            return !string.IsNullOrWhiteSpace(IDCardNumber) &&
-                   !string.IsNullOrWhiteSpace(FirstName) &&
-                   !string.IsNullOrWhiteSpace(LastName) &&
-                   !string.IsNullOrWhiteSpace(Email) &&
-                   !string.IsNullOrWhiteSpace(PhoneNumber) &&
-                   !string.IsNullOrWhiteSpace(Major?.Name);
-        }
+        private bool ValidateInput() =>
+            !string.IsNullOrWhiteSpace(IDCardNumber) &&
+            !string.IsNullOrWhiteSpace(FirstName) &&
+            !string.IsNullOrWhiteSpace(LastName) &&
+            !string.IsNullOrWhiteSpace(Email) &&
+            !string.IsNullOrWhiteSpace(PhoneNumber) &&
+            Major != null;
 
         private void ClearFields()
         {
@@ -173,7 +143,7 @@ namespace ClassCheck.ViewModels
             LastName = string.Empty;
             Email = string.Empty;
             PhoneNumber = string.Empty;
-            Major.Name = string.Empty; // Clear Major selection
+            Major = null;
         }
     }
 }

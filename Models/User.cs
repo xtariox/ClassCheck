@@ -3,7 +3,7 @@
 namespace ClassCheck.Models
 {
     [Table("Users")]
-    public class User
+    public class User : IEntity
     {
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }

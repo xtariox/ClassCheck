@@ -1,5 +1,4 @@
 ﻿using ClassCheck.Models;
-using ClassCheck.Models;
 using SQLite;
 
 namespace ClassCheck.Services
@@ -9,7 +8,7 @@ namespace ClassCheck.Services
         private const string DB_NAME = "attendanceDB.db3";
         private readonly SQLiteAsyncConnection _connection;
         private readonly SecurityService _securityService;
-        private static readonly TaskCompletionSource<bool> _initializationCompleted = new();
+        private static TaskCompletionSource<bool> _initializationCompleted = new();
         private bool _majorsInitialized = false;
 
         public DatabaseService(SecurityService securityService)
@@ -22,6 +21,7 @@ namespace ClassCheck.Services
 
         private async Task InitializeAsync()
         {
+            //await ResetDatabaseAsync();
             try
             {
                 await InitializeDatabaseAsync();
@@ -63,113 +63,68 @@ namespace ClassCheck.Services
             await _connection.ExecuteAsync(createEmailIndex);
         }
 
-        public async Task<List<User>> GetUsers()
+        // ------------------ Generic CRUD Operations -----------------------
+        public async Task<List<T>> GetAllAsync<T>() where T : IEntity, new()
         {
             await EnsureInitializedAsync();
-            return await _connection.Table<User>().ToListAsync();
+            return await _connection.Table<T>().ToListAsync();
         }
 
-        public async Task<User> GetById(int id)
+        public async Task<T> GetByIdAsync<T>(int id) where T : IEntity, new()
         {
             await EnsureInitializedAsync();
-            return await _connection.Table<User>().Where(u => u.Id == id).FirstOrDefaultAsync();
+            return await _connection.Table<T>().Where(x => x.Id == id).FirstOrDefaultAsync();
         }
 
-        public async Task<User> GetByEmail(string email)
+        public async Task<int> InsertAsync<T>(T entity) where T : IEntity, new()
+        {
+            await EnsureInitializedAsync();
+            return await _connection.InsertAsync(entity);
+        }
+
+        public async Task<int> UpdateAsync<T>(T entity) where T : IEntity, new()
+        {
+            await EnsureInitializedAsync();
+            return await _connection.UpdateAsync(entity);
+        }
+
+        public async Task<int> DeleteAsync<T>(T entity) where T : IEntity, new()
+        {
+            await EnsureInitializedAsync();
+            return await _connection.DeleteAsync(entity);
+        }
+        // ---------------------------------------------------------------
+
+        // ------------------ Retain Specialized Methods -------------------
+        public async Task<User> GetByEmailAsync(string email)
         {
             await EnsureInitializedAsync();
             return await _connection.Table<User>().Where(u => u.Email == email).FirstOrDefaultAsync();
         }
 
-        public async Task<int> Insert(User user)
-        {
-            await EnsureInitializedAsync();
-            return await _connection.InsertAsync(user);
-        }
-
-        public async Task<int> Update(User user)
-        {
-            await EnsureInitializedAsync();
-            return await _connection.UpdateAsync(user);
-        }
-
-        public async Task<int> Delete(User user)
-        {
-            await EnsureInitializedAsync();
-            return await _connection.DeleteAsync(user);
-        }
-
-
-
-        // -------------------- Student ---------------------------
-
-        public async Task<List<Student>> GetStudents()
-        {
-            await EnsureInitializedAsync();
-            return await _connection.Table<Student>().ToListAsync();
-        }
-
-        public async Task<Student> GetByIDCardNumber(string idCardNumber)
+        // Reintroduced method to get a student by ID card number
+        public async Task<Student> GetByIDCardNumberAsync(string idCardNumber)
         {
             await EnsureInitializedAsync();
             return await _connection.Table<Student>().Where(s => s.IDCardNumber == idCardNumber).FirstOrDefaultAsync();
         }
 
-        public async Task<int> Insert(Student student)
+        // Method to get all attendance
+        public async Task<List<Attendance>> GetAttendanceByFiltersAsync(string lessonId, string major, DateTime date)
         {
             await EnsureInitializedAsync();
-            return await _connection.InsertAsync(student);
+            var query = _connection.Table<Attendance>().Where(a => a.LessonId == lessonId && a.Major == major && a.AttendanceDate.Date == date.Date);
+            return await query.ToListAsync();
         }
 
-        public async Task<int> Update(Student student)
+        // Method to get attendance by student
+        public async Task<int> UpdateAttendanceAsync(Attendance attendance)
         {
             await EnsureInitializedAsync();
-            return await _connection.UpdateAsync(student);
+            return await _connection.UpdateAsync(attendance);
         }
+        // ---------------------------------------------------------------
 
-        public async Task<int> Delete(Student student)
-        {
-            await EnsureInitializedAsync();
-            return await _connection.DeleteAsync(student);
-        }
-
-
-
-
-        // -------------------- Lesson ---------------------------
-
-        public async Task<List<Lesson>> GetLessons()
-        {
-            await EnsureInitializedAsync();
-            return await _connection.Table<Lesson>().ToListAsync();
-        }
-
-        public async Task<Lesson> GetByID(int id)
-        {
-            await EnsureInitializedAsync();
-            return await _connection.Table<Lesson>().Where(l => l.Id == id).FirstOrDefaultAsync();
-        }
-
-        public async Task<int> Insert(Lesson lesson)
-        {
-            await EnsureInitializedAsync();
-            return await _connection.InsertAsync(lesson);
-        }
-
-        public async Task<int> Update(Lesson lesson)
-        {
-            await EnsureInitializedAsync();
-            return await _connection.UpdateAsync(lesson);
-        }
-
-        public async Task<int> Delete(Lesson lesson)
-        {
-            await EnsureInitializedAsync();
-            return await _connection.DeleteAsync(lesson);
-        }
-
-        // -------------------- Major ---------------------------
-        // Method to add a major
         // Method to initialize the database with predefined majors
         public async Task InitializeMajorsAsync()
         {
@@ -203,27 +158,19 @@ namespace ClassCheck.Services
         }
 
 
-        // -------------------- Attendance ---------------------------
-        // Method to add an attendance
-        public async Task<int> AddAttendanceAsync(Attendance attendance)
+        // Method to reset the database
+        public async Task ResetDatabaseAsync()
         {
-            await EnsureInitializedAsync();
-            return await _connection.InsertAsync(attendance);
-        }
+            await _connection.DropTableAsync<User>();
+            await _connection.DropTableAsync<Student>();
+            await _connection.DropTableAsync<Lesson>();
+            await _connection.DropTableAsync<Major>();
+            await _connection.DropTableAsync<Attendance>();
 
-        // Method to get all attendance
-        public async Task<List<Attendance>> GetAttendanceByFiltersAsync(string lessonId, string major, DateTime date)
-        {
-            await EnsureInitializedAsync();
-            var query = _connection.Table<Attendance>().Where(a => a.LessonId == lessonId && a.Major == major && a.AttendanceDate.Date == date.Date);
-            return await query.ToListAsync();
-        }
+            _majorsInitialized = false;
+            _initializationCompleted = new TaskCompletionSource<bool>();
 
-        // Method to get attendance by student
-        public async Task<int> UpdateAttendanceAsync(Attendance attendance)
-        {
-            await EnsureInitializedAsync();
-            return await _connection.UpdateAsync(attendance);
+            await InitializeAsync();
         }
     }
 }

@@ -7,6 +7,7 @@ public class MajorViewModel : INotifyPropertyChanged
 {
     private readonly DatabaseService _databaseService;
     private ObservableCollection<Major> _majors;
+    private static bool _isLoaded = false;
 
     public ObservableCollection<Major> Majors
     {
@@ -22,14 +23,21 @@ public class MajorViewModel : INotifyPropertyChanged
     {
         _databaseService = databaseService;
         _majors = new ObservableCollection<Major>();
-        LoadMajorsAsync().ConfigureAwait(false); // Ensure this is called
+
+        if (!_isLoaded)
+        {
+            LoadMajorsAsync().ConfigureAwait(false); // Ensure this is called only once
+        }
     }
 
     public async Task LoadMajorsAsync()
     {
+        if (_isLoaded)
+            return;
+
         try
         {
-            var majors = await _databaseService.GetMajorsAsync();
+            var majors = await _databaseService.GetAllAsync<Major>(); // Use generic GetAllAsync
             Majors.Clear();
             foreach (var major in majors)
             {
@@ -37,6 +45,7 @@ public class MajorViewModel : INotifyPropertyChanged
                 System.Diagnostics.Debug.WriteLine($"Added major: {major.Name}");
             }
             System.Diagnostics.Debug.WriteLine($"Total majors loaded: {Majors.Count}");
+            _isLoaded = true;
         }
         catch (Exception ex)
         {

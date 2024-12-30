@@ -6,8 +6,8 @@ namespace ClassCheck.Views;
 
 public partial class AddLessonPage : ContentPage
 {
-	public AddLessonPage()
-	{
+    public AddLessonPage()
+    {
         InitializeComponent();
         BindingContext = new AddLessonViewModel(
             App.DependencyService.GetRequiredService<DatabaseService>(),

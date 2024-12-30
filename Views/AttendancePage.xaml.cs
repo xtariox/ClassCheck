@@ -14,6 +14,5 @@ public partial class AttendancePage : ContentPage
             App.DependencyService.GetRequiredService<MajorViewModel>(),
             App.DependencyService.GetRequiredService<AddLessonViewModel>()
         );
-
     }
 }

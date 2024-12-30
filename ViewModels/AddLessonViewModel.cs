@@ -120,7 +120,7 @@ namespace ClassCheck.ViewModels
                 };
 
                 // Add to the database
-                var result = await _databaseService.Insert(newLesson);
+                var result = await _databaseService.InsertAsync(newLesson);
 
                 // Update the success or error message
                 if (result > 0)
@@ -163,7 +163,7 @@ namespace ClassCheck.ViewModels
             try
             {
                 // Retrieve the list of lessons from the database
-                var lessons = await _databaseService.GetLessons();  // Assuming the method GetLessons exists in the DatabaseService
+                var lessons = await _databaseService.GetAllAsync<Lesson>();
 
                 // Clear the existing lessons collection
                 Lessons.Clear();

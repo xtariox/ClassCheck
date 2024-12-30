@@ -1,8 +1,9 @@
-﻿using SQLite;
+﻿using ClassCheck.Models;
+using SQLite;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-public class Major : INotifyPropertyChanged
+public class Major : INotifyPropertyChanged, IEntity
 {
     private int _id;
     private string _name;

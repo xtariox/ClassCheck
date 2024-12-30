@@ -2,8 +2,10 @@
 
 namespace ClassCheck.Models
 {
-    public class Student
+    public class Student : IEntity
     {
+        public int Id { get; set; } // Won't be used. It's just to implement IEntity
+
         [PrimaryKey]
         public string IDCardNumber { get; set; }
 

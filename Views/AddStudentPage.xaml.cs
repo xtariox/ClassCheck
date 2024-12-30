@@ -1,8 +1,6 @@
 using ClassCheck.Services;
 using ClassCheck.ViewModels;
-using ClassCheck.ViewModels;
-using ClassCheck.Views;
-using ClassCheck.Views;
+using Microsoft.Extensions.Logging;
 
 namespace ClassCheck.Views;
 
@@ -13,7 +11,8 @@ public partial class AddStudentPage : ContentPage
         InitializeComponent();
         BindingContext = new AddStudentViewModel(
             App.DependencyService.GetRequiredService<DatabaseService>(),
-            App.DependencyService.GetRequiredService<MajorViewModel>()
+            App.DependencyService.GetRequiredService<MajorViewModel>(),
+            App.DependencyService.GetRequiredService<ILogger<AddStudentViewModel>>()
         );
     }
 }

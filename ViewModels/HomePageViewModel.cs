@@ -42,10 +42,9 @@ namespace ClassCheck.ViewModels
 
             LogoutCommand = new Command(async () =>
             {
-
+                await Shell.Current.GoToAsync("///login");
             });
         }
 
     }
 }
-    

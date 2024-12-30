@@ -1,8 +1,6 @@
 ﻿using ClassCheck.Services;
 using ClassCheck.ViewModels;
 using ClassCheck.Views;
-using ClassCheck.ViewModels;
-using ClassCheck.Views;
 using Microsoft.Extensions.Logging;
 
 
@@ -29,8 +27,7 @@ namespace ClassCheck
             // Register services with DI container
             // Use AddSingleton to ensure that only one instance of each service is created
             services.AddSingleton<SecurityService>();
-            services.AddSingleton<DatabaseService>(provider =>
-                new DatabaseService(provider.GetRequiredService<SecurityService>()));
+            services.AddSingleton<DatabaseService>(provider => new(provider.GetRequiredService<SecurityService>()));
             services.AddSingleton<UserService>();
 
             // Register ViewModels
@@ -43,7 +40,6 @@ namespace ClassCheck
             services.AddTransient<HomePageViewModel>();
             services.AddTransient<AddLessonViewModel>();
             services.AddTransient<AttendanceViewModel>();
-
 
             // Register Pages
             services.AddTransient<LoginPage>();
