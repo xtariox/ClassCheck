@@ -128,10 +128,12 @@ namespace ClassCheck.ViewModels
                 {
                     ErrorMessage = "Failed to add the student to database";
                     IsErrorVisible = true;
+                    _logger?.LogError("InsertAsync returned non-positive result for new student.");
                     return;
                 }
 
                 SuccessMessage = "Student added successfully!";
+                IsSuccessVisible = true;
                 ClearFields();
 
             }, "Failed to add student");

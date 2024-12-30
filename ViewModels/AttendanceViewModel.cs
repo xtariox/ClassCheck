@@ -12,7 +12,7 @@ public class AttendanceViewModel : BaseViewModel
     public ObservableCollection<Major> Majors => _majorViewModel.Majors;
     public ObservableCollection<Lesson> Lessons => _lessonViewModel.Lessons;
 
-    public ObservableCollection<Attendance> Attendances { get; private set; } = [];
+    public ObservableCollection<Attendance> Attendances { get; private set; } = new ObservableCollection<Attendance>();
 
 
     public ICommand LoadAttendanceCommand { get; }

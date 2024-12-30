@@ -3,6 +3,7 @@ using ClassCheck.Models;
 using ClassCheck.Services;
 using System.Collections.ObjectModel;
 using Microsoft.Extensions.Logging;
+using Microsoft.Maui.Dispatching; // Add this using directive at the top
 
 namespace ClassCheck.ViewModels
 {
@@ -131,6 +132,7 @@ namespace ClassCheck.ViewModels
                     SuccessMessage = "Lesson added successfully!";
                     ClearFields();
                     LessonAdded?.Invoke(this, EventArgs.Empty);
+                    MainThread.BeginInvokeOnMainThread(() => Lessons.Add(newLesson)); // Update on main thread
                 }
                 else
                 {

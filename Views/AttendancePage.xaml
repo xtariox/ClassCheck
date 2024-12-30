@@ -9,7 +9,8 @@
         <Picker ItemsSource="{Binding Lessons}"
                 ItemDisplayBinding="{Binding CourseName}" 
                 SelectedItem="{Binding SelectedLesson}" 
-                Title="Select Lesson" />
+                Title="Select Lesson" 
+                x:Name="LessonPicker" />
 
         <!-- Picker for Major -->
         <Picker ItemsSource="{Binding Majors}"

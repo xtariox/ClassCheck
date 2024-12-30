@@ -4,9 +4,10 @@ namespace ClassCheck.Models
 {
     public class Student : IEntity
     {
-        public int Id { get; set; } // Won't be used. It's just to implement IEntity
+        [PrimaryKey, AutoIncrement]
+        public int Id { get; set; } // Set as primary key and auto-incremented
 
-        [PrimaryKey]
+        [Unique, NotNull]
         public string IDCardNumber { get; set; }
 
         [NotNull]
