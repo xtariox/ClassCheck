@@ -427,25 +427,26 @@
     </Style>
 
     <Style TargetType="telerik:RadDataGrid">
-        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray950}}" />
+        <Setter Property="BackgroundColor" Value="Transparent" />
     </Style>
     <Style TargetType="telerik:DataGridRowBackgroundAppearance">
-        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray950}}" />
+        <Setter Property="BackgroundColor" Value="Transparent" />
     </Style>
         <Style TargetType="telerik:DataGridSelectionAppearance">
-            <Setter Property="BackgroundColor" Value="#B2DFDB" />
+        <Setter Property="BackgroundColor" Value="Transparent" />
             <Setter Property="BorderColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray950}}" />
         </Style>
     <Style TargetType="telerik:DataGridAlternateRowBackgroundAppearance">
-        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray950}}" />
+        <Setter Property="BackgroundColor" Value="Transparent" />
     </Style>
     <Style TargetType="telerik:DataGridColumnHeaderAppearance">
-        <Setter Property="TextColor" Value="#FFFFFF" />
+        <Setter Property="TextColor" Value="White" />
+        <Setter Property="BorderColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray950}}"/>
+        <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="BackgroundColor" Value="Transparent" />
-        <Setter Property="BackgroundColor" Value="Transparent" />
-        <Setter Property="SortIndicatorColor" Value="#FFFFFF" />
+        <Setter Property="HoverBackgroundColor" Value="Transparent" />
+        <Setter Property="SortIndicatorColor" Value="Transparent" />
         <Setter Property="FilterIndicatorTextColor" Value="#99FFFFFF" />
-        <Setter Property="BackgroundColor" Value="Transparent" />
     </Style>
 
     <Style TargetType="telerik:DataGridTextCellAppearance">

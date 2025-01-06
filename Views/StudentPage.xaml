@@ -3,7 +3,8 @@
              xmlns:telerik="http://schemas.telerik.com/2022/xaml/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="ClassCheck.Views.StudentPage"
-             xmlns:viewModels="clr-namespace:ClassCheck.ViewModels">
+             xmlns:viewModels="clr-namespace:ClassCheck.ViewModels"
+             Title="Student Page">
 
     <!--<ContentPage.Resources>
         <ResourceDictionary>
@@ -13,9 +14,9 @@
         </ResourceDictionary>
     </ContentPage.Resources>-->
 
-    <StackLayout Padding="20">
+    <StackLayout Margin="20">
         <!-- Horizontal layout for Picker and Label -->
-        <HorizontalStackLayout Spacing="10" VerticalOptions="Center" HorizontalOptions="Center">
+        <HorizontalStackLayout Spacing="10" VerticalOptions="Center" HorizontalOptions="Center" Margin="10">
             <Label Text="Select Major:"
                    VerticalOptions="Center"
                    HorizontalOptions="Start" />
@@ -25,12 +26,15 @@
                     HorizontalOptions="FillAndExpand"
                     VerticalOptions="Center" />
         </HorizontalStackLayout>
+        <ScrollView>
+            
+        </ScrollView>
 
-            <!-- RadDataGrid -->
+        <!-- RadDataGrid -->
         <telerik:RadDataGrid x:Name="studentsGrid"
                      ItemsSource="{Binding FilteredStudents}"
                      AutoGenerateColumns="False"
-                     AutomationId="studentsGrid">
+                     AutomationId="studentsGrid" >
             <telerik:RadDataGrid.Columns>
                 <!-- Student ID Column -->
                 <!-- Other columns as required -->
@@ -61,6 +65,6 @@
             </telerik:RadDataGrid.Columns>
         </telerik:RadDataGrid>
 
-        <Button Text="Cancel" Command="{Binding CancelCommand}" BackgroundColor="Red" TextColor="White" />
+        <Button Text="Cancel" Command="{Binding CancelCommand}" Margin="20"/>
     </StackLayout>
 </ContentPage>
