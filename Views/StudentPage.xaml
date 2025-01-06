@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:telerik="http://schemas.telerik.com/2022/xaml/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="ClassCheck.Views.StudentPage"
+             xmlns:viewModels="clr-namespace:ClassCheck.ViewModels">
+
+    <!--<ContentPage.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/Styles/Styles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </ContentPage.Resources>-->
+
+    <StackLayout Padding="20">
+        <!-- Horizontal layout for Picker and Label -->
+        <HorizontalStackLayout Spacing="10" VerticalOptions="Center" HorizontalOptions="Center">
+            <Label Text="Select Major:"
+                   VerticalOptions="Center"
+                   HorizontalOptions="Start" />
+            <Picker x:Name="majorPicker"
+                    ItemsSource="{Binding Majors}"
+                    SelectedItem="{Binding SelectedMajor}"
+                    HorizontalOptions="FillAndExpand"
+                    VerticalOptions="Center" />
+        </HorizontalStackLayout>
+
+            <!-- RadDataGrid -->
+        <telerik:RadDataGrid x:Name="studentsGrid"
+                     ItemsSource="{Binding FilteredStudents}"
+                     AutoGenerateColumns="False"
+                     AutomationId="studentsGrid">
+            <telerik:RadDataGrid.Columns>
+                <!-- Student ID Column -->
+                <!-- Other columns as required -->
+                <telerik:DataGridTextColumn PropertyName="IDCardNumber"
+                                    HeaderText="ID Card Number" />
+
+                <telerik:DataGridTextColumn PropertyName="FullName"
+                                    HeaderText="Name" />
+
+                <telerik:DataGridTemplateColumn HeaderText="Major">
+                    <telerik:DataGridTemplateColumn.CellContentTemplate>
+                        <DataTemplate>
+                            <Picker ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type viewModels:StudentViewModel}}, Path=Majors}"
+                            SelectedItem="{Binding Major}"/>
+                        </DataTemplate>
+                    </telerik:DataGridTemplateColumn.CellContentTemplate>
+                </telerik:DataGridTemplateColumn>
+
+                <!-- Email Column -->
+                <telerik:DataGridTextColumn PropertyName="Email"
+                                    HeaderText="Email"
+                                    DataMemberBinding="{Binding Email}" />
+
+                <!-- Phone Number Column -->
+                <telerik:DataGridTextColumn PropertyName="PhoneNumber"
+                                    HeaderText="Phone Number"
+                                    DataMemberBinding="{Binding PhoneNumber}" />
+            </telerik:RadDataGrid.Columns>
+        </telerik:RadDataGrid>
+
+        <Button Text="Cancel" Command="{Binding CancelCommand}" BackgroundColor="Red" TextColor="White" />
+    </StackLayout>
+</ContentPage>

@@ -1,0 +1,84 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+xmlns:telerik="http://schemas.telerik.com/2022/xaml/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ClassCheck.ViewModels"
+             xmlns:converter="clr-namespace:ClassCheck.Converters"
+             x:Class="ClassCheck.Views.SearchPage"
+             >
+    <ContentPage.Resources>
+        <converter:InverseBoolConverter x:Key="InverseBoolConverter"/>
+    </ContentPage.Resources>
+
+    <StackLayout Padding="10">
+        <!-- Search Form -->
+        <StackLayout IsVisible="{Binding IsSearchLoaded, Converter={StaticResource InverseBoolConverter}}">
+            <Label Text="Search Student" FontSize="Large" HorizontalOptions="Center" />
+            <Entry Placeholder="Enter Full Name *"
+                   Text="{Binding FullName}" />
+            <Picker ItemsSource="{Binding Majors}"
+                    ItemDisplayBinding="{Binding Name}" 
+                    SelectedItem="{Binding SelectedMajor}" 
+                    Title="Select Major *" />
+            <Picker ItemsSource="{Binding FilteredLessons}"
+                    ItemDisplayBinding="{Binding CourseName}" 
+                    SelectedItem="{Binding SelectedLesson}" 
+                    Title="Select Lesson" />
+            <DatePicker Date="{Binding ScheduleDate}" />
+            <!-- Binding ScheduleDate here -->
+
+            <Button Text="Search" Command="{Binding LoadSearchCommand}" />
+            <Button Text="Cancel" Command="{Binding CancelCommand}" BackgroundColor="Red" TextColor="White" />
+        </StackLayout>
+
+        <!-- Filtered Results -->
+        <StackLayout IsVisible="{Binding IsSearchLoaded}">
+            <CollectionView ItemsSource="{Binding FilteredAttendance}">
+                <CollectionView.Header>
+                    <Grid Padding="5" ColumnSpacing="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <!-- Added column for Date -->
+                        </Grid.ColumnDefinitions>
+                        <Label Text="Student ID" Grid.Column="0" HorizontalOptions="Center" />
+                        <Label Text="Student Name" Grid.Column="1" HorizontalOptions="Center" />
+                        <Label Text="Present" Grid.Column="2" HorizontalOptions="Center" />
+                        <Label Text="Date" Grid.Column="3" HorizontalOptions="Center" />
+                        <!-- New Date Label -->
+                    </Grid>
+                </CollectionView.Header>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="5" ColumnSpacing="10" RowDefinitions="Auto">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <!-- Added column for Date -->
+                            </Grid.ColumnDefinitions>
+                            <Label Text="{Binding StudentId}" Grid.Column="0" VerticalOptions="Center" />
+                            <Label Text="{Binding StudentFName}" Grid.Column="1" VerticalOptions="Center" />
+                            <CheckBox IsChecked="{Binding IsPresent}" Grid.Column="2" VerticalOptions="Center" />
+                            <Label Text="{Binding AttendanceDate, StringFormat='{0:MM/dd/yyyy}'}" Grid.Column="3" VerticalOptions="Center" />
+                            <!-- Date Display -->
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </StackLayout>
+
+        <!-- Messages -->
+        <Label Text="{Binding SuccessMessage}" TextColor="Green" IsVisible="{Binding IsSuccessVisible}" HorizontalOptions="Center" />
+        <Label Text="{Binding ErrorMessage}" TextColor="Red" IsVisible="{Binding IsErrorVisible}" HorizontalOptions="Center" />
+
+        <!-- Actions -->
+        <Button Text="Save Attendance" IsVisible="{Binding IsSearchLoaded}" Command="{Binding SaveSearchCommand}" />
+        <Button Text="Cancel" IsVisible="{Binding IsSearchLoaded}" Command="{Binding ReturnCommand}" BackgroundColor="Red" TextColor="White" />
+    </StackLayout>
+</ContentPage>

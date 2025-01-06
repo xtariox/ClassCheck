@@ -110,7 +110,7 @@ namespace ClassCheck.Services
         }
 
         // Method to get all attendance
-        public async Task<List<Attendance>> GetAttendanceByFiltersAsync(string lessonId, string major, DateTime date)
+        public async Task<List<Attendance>> GetAttendanceByFiltersAsync(int lessonId, string major, DateTime date)
         {
             await EnsureInitializedAsync();
             var query = _connection.Table<Attendance>().Where(a => a.LessonId == lessonId && a.Major == major && a.AttendanceDate.Date == date.Date);

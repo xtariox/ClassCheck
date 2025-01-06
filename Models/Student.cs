@@ -25,5 +25,8 @@ namespace ClassCheck.Models
         [NotNull]
         public string Major { get; set; } // Foreign key for Major
 
+        // Combines FirstName and LastName for display in the DataGrid
+        public string FullName => $"{FirstName} {LastName}";
+
     }
 }

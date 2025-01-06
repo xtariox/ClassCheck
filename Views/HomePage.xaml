@@ -9,8 +9,12 @@
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="15">
             <!-- Bouton Absence -->
-            <Button Text="Absence"
-        Command="{Binding NavigateToAbsenceCommand}" />
+                <Button Text="Absence"
+                    Command="{Binding NavigateToAbsenceCommand}" />
+
+                <!-- Bouton Liste des étudiants -->
+                <Button Text="List of Students"
+                            Command="{Binding NavigateToListOfStudentsCommand}" />
                 <!-- Bouton Ajouter un étudiant -->
                 <Button Text="Add Student"
                    
@@ -25,6 +29,10 @@
                 <Button Text="Search"
                    
                     Command="{Binding NavigateToSearchCommand}" />
+            
+                <!--Bouton Attendance-->
+                <Button Text="Attendance"
+                        Command="{Binding NavigateToAttendanceCommand}" />
 
                 <!-- Bouton Déconnexion -->
                 <Button Text="Logout"

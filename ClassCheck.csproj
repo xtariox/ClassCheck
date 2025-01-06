@@ -63,6 +63,7 @@
 		<PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
 		<PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
 		<PackageReference Include="Sustainsys.Saml2" Version="2.10.0" />
+		<PackageReference Include="Telerik.UI.for.Maui.Trial" Version="9.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -72,9 +73,6 @@
 	</ItemGroup>
 	
 	<ItemGroup>
-	  <MauiXaml Update="Resources\Styles\Dictionary1.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
 	  <MauiXaml Update="Views\AddLessonPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

@@ -16,6 +16,7 @@ namespace ClassCheck.ViewModels
         public ICommand NavigateToNewLessonCommand { get; }
         public ICommand NavigateToSearchCommand { get; }
         public ICommand LogoutCommand { get; }
+        public ICommand NavigateToListOfStudentsCommand { get; }
 
         public HomePageViewModel()
         {
@@ -23,6 +24,11 @@ namespace ClassCheck.ViewModels
             {
                 
                 await Shell.Current.GoToAsync("///attendance");
+            });
+
+            NavigateToListOfStudentsCommand = new Command(async () =>
+            {
+                await Shell.Current.GoToAsync("///student");
             });
 
             NavigateToAddStudentCommand = new Command(async () =>
@@ -37,7 +43,7 @@ namespace ClassCheck.ViewModels
 
             NavigateToSearchCommand = new Command(async () =>
             {
-                await Shell.Current.GoToAsync("///login");
+                await Shell.Current.GoToAsync("///search");
             });
 
             LogoutCommand = new Command(async () =>

@@ -2,7 +2,9 @@
 <?xaml-comp compile="true" ?>
 <ResourceDictionary 
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:telerik="http://schemas.telerik.com/2022/xaml/maui"
+>
 
     <Style TargetType="ActivityIndicator">
         <Setter Property="Color" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource White}}" />
@@ -424,4 +426,33 @@
         <Setter Property="SelectedTabColor" Value="{AppThemeBinding Light={StaticResource Gray950}, Dark={StaticResource Gray200}}" />
     </Style>
 
+    <Style TargetType="telerik:RadDataGrid">
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray950}}" />
+    </Style>
+    <Style TargetType="telerik:DataGridRowBackgroundAppearance">
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray950}}" />
+    </Style>
+        <Style TargetType="telerik:DataGridSelectionAppearance">
+            <Setter Property="BackgroundColor" Value="#B2DFDB" />
+            <Setter Property="BorderColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray950}}" />
+        </Style>
+    <Style TargetType="telerik:DataGridAlternateRowBackgroundAppearance">
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray950}}" />
+    </Style>
+    <Style TargetType="telerik:DataGridColumnHeaderAppearance">
+        <Setter Property="TextColor" Value="#FFFFFF" />
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="SortIndicatorColor" Value="#FFFFFF" />
+        <Setter Property="FilterIndicatorTextColor" Value="#99FFFFFF" />
+        <Setter Property="BackgroundColor" Value="Transparent" />
+    </Style>
+
+    <Style TargetType="telerik:DataGridTextCellAppearance">
+        <Setter Property="TextMargin" Value="2" />
+        <Setter Property="TextColor"  Value="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource White}}" />
+        <Setter Property="HoverTextColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray950}}" />
+        <Setter Property="SelectedTextColor" Value="Transparent" />
+        <Setter Property="HorizontalTextAlignment" Value="Center" />
+    </Style>
 </ResourceDictionary>

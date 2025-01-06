@@ -40,6 +40,9 @@ namespace ClassCheck
             services.AddTransient<HomePageViewModel>();
             services.AddSingleton<AddLessonViewModel>();
             services.AddTransient<AttendanceViewModel>();
+            services.AddTransient<SearchViewModel>();
+            services.AddTransient<StudentViewModel>();
+
 
             // Register Pages
             services.AddTransient<LoginPage>();
@@ -49,6 +52,9 @@ namespace ClassCheck
             services.AddTransient<HomePage>();
             services.AddTransient<AddLessonPage>();
             services.AddTransient<AttendancePage>();
+            services.AddTransient<SearchPage>();
+            services.AddTransient<StudentPage>();
+
 
             // Register AppShell
             services.AddSingleton<AppShell>(); // Main application shell which is responsible for navigation and routing

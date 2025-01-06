@@ -105,7 +105,7 @@ public class AttendanceViewModel : BaseViewModel
         try
         {
             var attendanceList = await _databaseService.GetAttendanceByFiltersAsync(
-                SelectedLesson.Id.ToString(),
+                SelectedLesson.Id,
                 SelectedMajor.Name,
                 AttendanceDate
             );

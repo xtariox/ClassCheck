@@ -27,6 +27,8 @@ namespace ClassCheck
             var homepage = serviceProvider.GetRequiredService<HomePage>();
             var addlesson = serviceProvider.GetRequiredService<AddLessonPage>();
             var attendance = serviceProvider.GetRequiredService<AttendancePage>();
+            var search = serviceProvider.GetRequiredService<SearchPage>();
+            var student = serviceProvider.GetRequiredService<StudentPage>();
 
             // Add ShellContent for each page
             this.Items.Add(new ShellContent
@@ -66,6 +68,18 @@ namespace ClassCheck
             {
                 Route = "attendance",
                 Content = attendance
+            });
+
+            this.Items.Add(new ShellContent
+            {
+                Route = "search",
+                Content = search
+            });
+
+            this.Items.Add(new ShellContent
+            {
+                Route = "student",
+                Content = student
             });
 
         }
