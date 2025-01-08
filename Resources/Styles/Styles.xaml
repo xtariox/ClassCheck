@@ -34,7 +34,11 @@
         <Setter Property="CornerRadius" Value="8"/>
         <Setter Property="Padding" Value="14,10"/>
         <Setter Property="MinimumHeightRequest" Value="44"/>
-        <Setter Property="MinimumWidthRequest" Value="44"/>
+        <Setter Property="MinimumWidthRequest" Value="200"/>
+        <Setter Property="Margin" Value="10"/>
+        <Setter Property="HorizontalOptions" Value="Center"/>
+        <Setter Property="VerticalOptions" Value="Center"/>
+        <Setter Property="LineBreakMode" Value="WordWrap"/>
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
                 <VisualStateGroup x:Name="CommonStates">
@@ -213,6 +217,7 @@
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="MinimumHeightRequest" Value="44"/>
         <Setter Property="MinimumWidthRequest" Value="44"/>
+        <Setter Property="WidthRequest" Value="200"/>
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
                 <VisualStateGroup x:Name="CommonStates">
@@ -428,32 +433,54 @@
 
     <Style TargetType="telerik:RadDataGrid">
         <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray950}}" />
+        <Setter Property="BorderThickness" Value="1"/>
     </Style>
+
     <Style TargetType="telerik:DataGridRowBackgroundAppearance">
         <Setter Property="BackgroundColor" Value="Transparent" />
     </Style>
-        <Style TargetType="telerik:DataGridSelectionAppearance">
+
+    <Style TargetType="telerik:DataGridSelectionAppearance">
+        <!-- Ensure selected row stays transparent -->
         <Setter Property="BackgroundColor" Value="Transparent" />
-            <Setter Property="BorderColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray950}}" />
-        </Style>
+        <Setter Property="BorderColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray900}}" />
+    </Style>
+
     <Style TargetType="telerik:DataGridAlternateRowBackgroundAppearance">
+        <!-- Ensure alternate row stays transparent -->
         <Setter Property="BackgroundColor" Value="Transparent" />
     </Style>
+
+    <!-- This Style prevents modification highlighting from changing the row background -->
+    <!--<Style TargetType="telerik:DataGridModifiedRowAppearance">
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
+    </Style>-->
+
     <Style TargetType="telerik:DataGridColumnHeaderAppearance">
-        <Setter Property="TextColor" Value="White" />
-        <Setter Property="BorderColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray950}}"/>
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
+        <Setter Property="BorderColor" Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray600}}" />
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="BackgroundColor" Value="Transparent" />
         <Setter Property="HoverBackgroundColor" Value="Transparent" />
         <Setter Property="SortIndicatorColor" Value="Transparent" />
-        <Setter Property="FilterIndicatorTextColor" Value="#99FFFFFF" />
+        <Setter Property="FilterIndicatorTextColor" Value="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}" />
     </Style>
 
     <Style TargetType="telerik:DataGridTextCellAppearance">
         <Setter Property="TextMargin" Value="2" />
-        <Setter Property="TextColor"  Value="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource White}}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource White}}" />
         <Setter Property="HoverTextColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray950}}" />
-        <Setter Property="SelectedTextColor" Value="Transparent" />
+        <Setter Property="SelectedTextColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray950}}" />
         <Setter Property="HorizontalTextAlignment" Value="Center" />
     </Style>
+
+    <Style x:Key="CustomPickerStyle" TargetType="Picker">
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource White}}" />
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray950}}" />
+        <Setter Property="HorizontalTextAlignment" Value="Center" />
+        <Setter Property="Margin" Value="5"/>
+    </Style>
+
 </ResourceDictionary>

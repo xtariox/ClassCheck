@@ -27,10 +27,7 @@
                     VerticalOptions="Center" />
         </HorizontalStackLayout>
         <ScrollView>
-            
-        </ScrollView>
-
-        <!-- RadDataGrid -->
+            <!-- RadDataGrid -->
         <telerik:RadDataGrid x:Name="studentsGrid"
                      ItemsSource="{Binding FilteredStudents}"
                      AutoGenerateColumns="False"
@@ -66,5 +63,7 @@
         </telerik:RadDataGrid>
 
         <Button Text="Cancel" Command="{Binding CancelCommand}" Margin="20"/>
+        </ScrollView>   
     </StackLayout>
+
 </ContentPage>

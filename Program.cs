@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 using Telerik.Maui.Controls.Compatibility;
 
 namespace ClassCheck
@@ -18,7 +18,7 @@ namespace ClassCheck
                 });
 
 #if DEBUG
-    		builder.Logging.AddDebug();
+            builder.Logging.AddDebug();
 #endif
 
             return builder.Build();
