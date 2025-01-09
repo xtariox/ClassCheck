@@ -49,7 +49,7 @@ public class SearchViewModel : BaseViewModel
                 if (value != null)
                 {
                     FilteredLessons = new ObservableCollection<Lesson>(Lessons.Where(lesson =>
-                        lesson.Major.Equals(value.Name, StringComparison.OrdinalIgnoreCase)));
+                        lesson.Major.Name.Equals(value.Name, StringComparison.OrdinalIgnoreCase)));
                 }
                 else
                 {

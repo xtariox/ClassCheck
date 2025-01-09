@@ -5,16 +5,9 @@
              x:Class="ClassCheck.Views.StudentPage"
              xmlns:viewModels="clr-namespace:ClassCheck.ViewModels"
              Title="Student Page">
+    <ScrollView>
 
-    <!--<ContentPage.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Resources/Styles/Styles.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </ContentPage.Resources>-->
-
-    <StackLayout Margin="20">
+        <StackLayout Margin="20">
         <!-- Horizontal layout for Picker and Label -->
         <HorizontalStackLayout Spacing="10" VerticalOptions="Center" HorizontalOptions="Center" Margin="10">
             <Label Text="Select Major:"
@@ -26,12 +19,12 @@
                     HorizontalOptions="FillAndExpand"
                     VerticalOptions="Center" />
         </HorizontalStackLayout>
-        <ScrollView>
             <!-- RadDataGrid -->
         <telerik:RadDataGrid x:Name="studentsGrid"
                      ItemsSource="{Binding FilteredStudents}"
                      AutoGenerateColumns="False"
-                     AutomationId="studentsGrid" >
+                     AutomationId="studentsGrid"
+                     HeightRequest="400">
             <telerik:RadDataGrid.Columns>
                 <!-- Student ID Column -->
                 <!-- Other columns as required -->
@@ -61,9 +54,10 @@
                                     DataMemberBinding="{Binding PhoneNumber}" />
             </telerik:RadDataGrid.Columns>
         </telerik:RadDataGrid>
+            <Button Text="Cancel" Command="{Binding CancelCommand}" />
 
-        <Button Text="Cancel" Command="{Binding CancelCommand}" Margin="20"/>
-        </ScrollView>   
-    </StackLayout>
+        </StackLayout>
+    </ScrollView>
+
 
 </ContentPage>

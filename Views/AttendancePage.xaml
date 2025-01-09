@@ -5,23 +5,29 @@
     <StackLayout Padding="10">
         <Label Text="Mark Attendance" FontSize="Large" HorizontalOptions="Center" />
 
-        <!-- Picker for Lesson -->
-        <Picker ItemsSource="{Binding Lessons}"
-                ItemDisplayBinding="{Binding CourseName}" 
-                SelectedItem="{Binding SelectedLesson}" 
-                Title="Select Lesson" 
-                x:Name="LessonPicker" />
+        <!-- Horizontal layout for Pickers and DatePicker -->
+        <HorizontalStackLayout Spacing="10" VerticalOptions="Center" HorizontalOptions="Center" Margin="10">
+            <!-- Picker for Major -->
+            <Picker ItemsSource="{Binding Majors}"
+                    ItemDisplayBinding="{Binding Name}" 
+                    SelectedItem="{Binding SelectedMajor}" 
+                    Title="Select Major" />
 
-        <!-- Picker for Major -->
-        <Picker ItemsSource="{Binding Majors}"
-                ItemDisplayBinding="{Binding Name}" 
-                SelectedItem="{Binding SelectedMajor}" 
-                Title="Select Major" />
+            <!-- Picker for Lesson -->
+            <Picker ItemsSource="{Binding FilteredLessons}" 
+                    ItemDisplayBinding="{Binding CourseName}" 
+                    SelectedItem="{Binding SelectedLesson}" 
+                    
+                    Title="Select Lesson" />
 
-        <DatePicker Date="{Binding AttendanceDate}" />
+            <!-- DatePicker -->
+            <DatePicker Date="{Binding AttendanceDate}" />
+        </HorizontalStackLayout>
+
+        <Label Text="{Binding ErrorMessage}" TextColor="Red" IsVisible="{Binding IsErrorVisible}" />
+
         <Button Text="Load Attendance" Command="{Binding LoadAttendanceCommand}" />
         <Button Text="Cancel" Command="{Binding CancelCommand}" BackgroundColor="Red" TextColor="White" />
-
 
         <CollectionView ItemsSource="{Binding Attendances}">
             <CollectionView.ItemTemplate>

@@ -129,7 +129,7 @@ namespace ClassCheck.Services
         public async Task InitializeMajorsAsync()
         {
             if (_majorsInitialized) return;
-        
+
             await _connection.RunInTransactionAsync(async (db) =>
             {
                 var count = db.Table<Major>().Count();

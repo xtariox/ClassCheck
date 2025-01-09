@@ -1,6 +1,7 @@
 using ClassCheck.Constants;
 using ClassCheck.Models;
 using ClassCheck.Services;
+using ClassCheck.Services;
 using Microsoft.Extensions.Logging;
 using System.Windows.Input;
 
@@ -9,7 +10,7 @@ namespace ClassCheck.ViewModels
     public class MainPageViewModel : BaseViewModel
     {
         private readonly DatabaseService _databaseService;
-        private readonly UserService _userService;
+        private readonly Services.UserService _userService;
 
         private string _welcomeMessage;
         public string WelcomeMessage
@@ -28,7 +29,7 @@ namespace ClassCheck.ViewModels
         public ICommand LogoutCommand { get; }
 
         public MainPageViewModel(DatabaseService databaseService,
-                                 UserService userService,
+                                 Services.UserService userService,
                                  ILogger<MainPageViewModel> logger) : base(logger)
         {
             _databaseService = databaseService;

@@ -17,8 +17,28 @@ namespace ClassCheck.ViewModels
         private readonly DatabaseService _databaseService;
 
         // Observable collections
-        public ObservableCollection<Student> Students { get; set; }
-        public ObservableCollection<Student> FilteredStudents { get; set; }
+        private ObservableCollection<Student> _students;
+        public ObservableCollection<Student> Students
+        {
+            get { return _students; }
+            set
+            {
+                _students = value;
+                OnPropertyChanged(nameof(Students));
+                FilterStudents();
+            }
+        }
+
+        private ObservableCollection<Student> _filteredStudents;
+        public ObservableCollection<Student> FilteredStudents
+        {
+            get { return _filteredStudents; }
+            set
+            {
+                _filteredStudents = value;
+                OnPropertyChanged(nameof(FilteredStudents));
+            }
+        }
 
         public ICommand CancelCommand { get; }
 
@@ -26,15 +46,12 @@ namespace ClassCheck.ViewModels
         private string _selectedMajor;
         public string SelectedMajor
         {
-            get => _selectedMajor;
+            get { return _selectedMajor; }
             set
             {
-                if (_selectedMajor != value)
-                {
-                    _selectedMajor = value;
-                    OnPropertyChanged(nameof(SelectedMajor));
-                    FilterStudents();
-                }
+                _selectedMajor = value;
+                OnPropertyChanged(nameof(SelectedMajor));
+                FilterStudents();
             }
         }
 
@@ -150,21 +167,13 @@ namespace ClassCheck.ViewModels
 
         private void FilterStudents()
         {
-            FilteredStudents.Clear();
-
             if (string.IsNullOrEmpty(SelectedMajor))
             {
-                foreach (var student in Students)
-                {
-                    FilteredStudents.Add(student);
-                }
+                FilteredStudents = new ObservableCollection<Student>(Students);
             }
             else
             {
-                foreach (var student in Students.Where(s => s.Major == SelectedMajor))
-                {
-                    FilteredStudents.Add(student);
-                }
+                FilteredStudents = new ObservableCollection<Student>(Students.Where(s => s.Major == SelectedMajor));
             }
         }
 

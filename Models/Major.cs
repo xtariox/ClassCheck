@@ -3,37 +3,40 @@ using SQLite;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-public class Major : INotifyPropertyChanged, IEntity
+namespace ClassCheck.Models
 {
-    private int _id;
-    private string _name;
-
-    [PrimaryKey, AutoIncrement]
-    public int Id
+    public class Major : INotifyPropertyChanged, IEntity
     {
-        get => _id;
-        set
+        private int _id;
+        private string _name;
+
+        [PrimaryKey, AutoIncrement]
+        public int Id
         {
-            _id = value;
-            OnPropertyChanged();
+            get => _id;
+            set
+            {
+                _id = value;
+                OnPropertyChanged();
+            }
         }
-    }
 
-    [NotNull]
-    public string Name
-    {
-        get => _name;
-        set
+        [NotNull]
+        public string Name
         {
-            _name = value;
-            OnPropertyChanged();
+            get => _name;
+            set
+            {
+                _name = value;
+                OnPropertyChanged();
+            }
         }
-    }
 
-    public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler PropertyChanged;
 
-    protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using ClassCheck.Services;
+﻿using ClassCheck.Models;
+using ClassCheck.Services;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;

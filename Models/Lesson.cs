@@ -8,8 +8,8 @@ namespace ClassCheck.Models
     {
         private int _id;
         private string _courseName;
-        private string _major;
-        private DateTime _schedule; // Updated type to DateTime
+        private int _majorId; // Use MajorId as foreign key
+        private DateTime _schedule;
         private string _professor;
 
         [PrimaryKey, AutoIncrement]
@@ -35,15 +35,18 @@ namespace ClassCheck.Models
         }
 
         [NotNull]
-        public string Major
+        public int MajorId
         {
-            get => _major;
+            get => _majorId;
             set
             {
-                _major = value;
+                _majorId = value;
                 OnPropertyChanged();
             }
         }
+
+        [Ignore]
+        public Major Major { get; set; } // Ignored by SQLite, used for binding
 
         [NotNull]
         public DateTime Schedule
@@ -65,6 +68,12 @@ namespace ClassCheck.Models
                 _professor = value;
                 OnPropertyChanged();
             }
+        }
+
+        public Lesson()
+        {
+            // Remove this line as the professor will be set in the ViewModel
+            // Professor = Environment.UserName;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

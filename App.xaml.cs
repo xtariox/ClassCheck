@@ -76,6 +76,7 @@ namespace ClassCheck
 
         // The DependencyService instance that is set up for DI.
         public static IServiceProvider? DependencyService { get; private set; }
+        public static object CurrentUser { get; internal set; }
 
         private static async void InitializeDatabaseAsync()
         {

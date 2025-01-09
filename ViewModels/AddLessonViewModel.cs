@@ -119,7 +119,7 @@ namespace ClassCheck.ViewModels
                     CourseName = CourseName,
                     Professor = Professor,
                     Schedule = Schedule,
-                    Major = Major.Name
+                    Major = Major
                 };
 
                 // Add to the database
